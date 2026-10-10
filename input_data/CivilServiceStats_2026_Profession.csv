@@ -1,0 +1,159 @@
+Civil Service parent department,Civil Service organisation,Headcount of all civil servants working in the Actuary profession,Headcount of all civil servants working in the Clinical profession,Headcount of all civil servants working in the Commercial profession,Headcount of all civil servants working in the Communications profession,Headcount of all civil servants working in the Corporate Finance profession,Headcount of all civil servants working in the Counter Fraud profession,Headcount of all civil servants working in the Cyber profession,Headcount of all civil servants working in the Debt profession,Headcount of all civil servants working in the Digital and Data profession,Headcount of all civil servants working in the Economics profession,Headcount of all civil servants working in the Finance profession,Headcount of all civil servants working in the Grants profession,Headcount of all civil servants working in the Geography profession,Headcount of all civil servants working in the Human Resources profession,Headcount of all civil servants working in the Inspector of Education and Training profession,Headcount of all civil servants working in the Intelligence Analysis profession,Headcount of all civil servants working in the Internal Audit profession,Headcount of all civil servants working in the Knowledge and Information Management profession,Headcount of all civil servants working in the Legal profession,Headcount of all civil servants working in the Occupational Psychology Profession,Headcount of all civil servants working in the Operational Delivery profession,Headcount of all civil servants working in the Operational Research profession,Headcount of all civil servants working in the Planning profession,Headcount of all civil servants working in the Planning Inspectors profession,Headcount of all civil servants working in the Policy profession,Headcount of all civil servants working in the Project Delivery profession,Headcount of all civil servants working in the Property profession,Headcount of all civil servants working in the Risk Management profession,Headcount of all civil servants working in the Science and Engineering profession,Headcount of all civil servants working in the Security profession,Headcount of all civil servants working in the Social Research profession,Headcount of all civil servants working in the Statistics profession,Headcount of all civil servants working in the Tax profession,Headcount of all civil servants working in the Veterinarian profession,Headcount of all civil servants working in any other profession,Headcount of all civil servants with no reported profession,Total headcount of all civil servants
+Attorney General's Departments,Attorney General's Office,0,0,0,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30,0,10,0,0,0,10,0,0,0,0,0,0,0,0,0,[c],0,65
+Attorney General's Departments,Crown Prosecution Service,0,0,50,80,0,0,10,0,190,0,80,0,0,225,0,0,0,45,"3,625",0,"3,665",0,0,0,105,140,25,[c],0,40,10,0,0,0,15,0,"8,315"
+Attorney General's Departments,HM Crown Prosecution Service Inspectorate,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,30
+Attorney General's Departments,Government Legal Department,0,0,[c],15,0,0,0,0,30,0,45,0,0,95,0,0,0,30,"2,740",0,370,0,0,0,20,25,5,0,0,15,0,[c],0,0,[c],0,"3,390"
+Attorney General's Departments,Serious Fraud Office [Note 20],0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,610,610
+Attorney General's Departments,Attorney General's Departments Overall,0,0,55,100,0,0,10,0,220,0,125,0,0,315,0,0,0,75,"6,420",0,"4,055",0,0,0,135,165,30,[c],0,55,10,[c],0,0,20,610,"12,405"
+Department for Business and Trade,Department for Business and Trade (excl. agencies),0,0,35,105,15,0,0,0,385,245,135,0,0,180,0,0,0,30,0,0,725,5,15,0,"3,400",185,5,0,25,25,15,75,0,0,315,0,"5,915"
+Department for Business and Trade,"Advisory, Conciliation and Arbitration Service",0,0,5,20,0,0,0,0,85,0,20,0,0,50,0,0,0,[c],0,0,900,5,0,0,25,20,0,0,0,0,0,10,0,0,0,0,"1,140"
+Department for Business and Trade,Companies House,0,0,25,45,0,60,0,0,470,[c],140,0,0,80,0,15,0,10,15,0,"1,405",0,0,0,50,40,5,0,0,15,10,10,0,0,0,30,"2,420"
+Department for Business and Trade,The Insolvency Service,0,0,20,20,0,400,0,0,55,[c],50,0,0,45,0,15,0,5,60,0,"1,295",0,0,0,25,65,0,0,0,[c],[c],20,0,0,[c],0,"2,085"
+Department for Business and Trade,Department for Business and Trade Overall,0,0,85,190,15,460,0,0,995,250,340,0,0,350,0,30,0,50,70,0,"4,325",10,15,0,"3,495",310,10,0,25,45,25,115,0,0,320,30,"11,565"
+Cabinet Office,Cabinet Office (excl. agencies),0,10,185,255,0,35,55,0,475,45,245,60,0,915,0,90,10,140,100,5,0,5,15,0,585,410,40,20,15,455,55,10,0,0,5,"1,140","5,385"
+Cabinet Office,Central Civil Service Fast Stream,0,0,95,0,0,0,10,0,200,95,100,0,0,360,0,0,0,0,265,0,0,40,0,0,175,240,60,10,120,0,40,150,0,0,0,105,"2,065"
+Cabinet Office,Crown Commercial Service,0,0,400,25,[c],0,0,0,120,0,25,0,0,30,0,0,[c],0,0,0,70,0,0,0,30,20,[c],[c],0,[c],0,0,0,0,0,0,735
+Cabinet Office,Government Commercial Organisation,0,0,"1,565",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,"1,580"
+Cabinet Office,Government Property Agency,0,0,5,40,0,0,0,0,50,0,65,0,0,25,0,0,0,[c],[c],0,0,0,0,0,0,45,185,0,0,25,0,0,0,0,30,0,470
+Cabinet Office,Cabinet Office Overall,0,10,"2,255",320,[c],35,65,0,845,140,440,60,0,"1,325",0,90,10,145,370,5,70,45,15,0,785,715,290,30,135,480,95,160,0,0,40,"1,260","10,235"
+Charity Commission,Charity Commission,0,0,[c],25,0,0,0,0,50,0,10,0,0,15,0,30,0,10,30,0,235,0,0,0,10,10,0,0,0,[c],0,5,0,0,10,0,445
+Charity Commission,Charity Commission Overall,0,0,[c],25,0,0,0,0,50,0,10,0,0,15,0,30,0,10,30,0,235,0,0,0,10,10,0,0,0,[c],0,5,0,0,10,0,445
+Competition and Markets Authority,Competition and Markets Authority,0,0,10,35,0,0,0,0,135,135,20,0,0,40,0,25,0,0,145,0,0,0,0,0,25,370,10,0,0,10,0,0,0,0,15,0,970
+Competition and Markets Authority,Competition and Markets Authority Overall,0,0,10,35,0,0,0,0,135,135,20,0,0,40,0,25,0,0,145,0,0,0,0,0,25,370,10,0,0,10,0,0,0,0,15,0,970
+Ministry of Defence,Ministry of Defence (excl. agencies),0,"1,740",895,550,0,25,0,0,"2,190",0,"1,530",0,0,"1,005",0,750,5,770,35,0,"10,110",60,0,0,"1,530","2,780","2,720",0,"1,305","6,200",15,285,0,0,"1,960",20,"36,470"
+Ministry of Defence,Defence Science and Technology Laboratory,0,[c],70,50,0,0,0,0,120,0,55,0,0,75,0,5,0,90,10,0,0,540,0,0,10,630,205,0,"1,820",70,0,0,0,0,715,380,"4,840"
+Ministry of Defence,Defence Equipment and Support,0,0,865,280,0,0,0,0,370,0,795,0,0,190,0,0,0,0,0,0,"2,565",0,0,0,0,"1,545",0,0,"2,680",220,0,0,0,0,925,0,"10,425"
+Ministry of Defence,Royal Fleet Auxiliary,0,0,0,0,0,0,0,0,140,0,0,0,0,15,0,0,5,0,0,0,770,0,0,0,0,0,0,0,470,0,0,0,0,0,260,20,"1,685"
+Ministry of Defence,Submarine Delivery Agency,0,0,215,15,0,0,0,0,85,0,155,0,0,60,0,0,0,30,0,0,370,0,0,0,5,595,[c],0,945,60,0,0,0,0,0,0,"2,535"
+Ministry of Defence,UK Hydrographic Office,0,0,15,15,[c],0,0,0,180,0,10,0,510,15,0,0,[c],15,0,0,30,0,0,0,0,10,5,0,25,10,0,0,0,0,105,0,955
+Ministry of Defence,Ministry of Defence Overall,0,"1,740","2,055",905,[c],25,0,0,"3,085",0,"2,540",0,510,"1,360",0,760,15,905,45,0,"13,850",600,0,0,"1,550","5,565","2,930",0,"7,240","6,555",15,285,0,0,"3,960",415,"56,915"
+"Department for Culture, Media and Sport","Department for Culture, Media and Sport",0,0,30,60,0,[c],0,0,45,45,75,0,0,50,0,0,0,[c],0,0,95,5,0,0,645,20,10,0,10,10,30,25,0,0,0,0,"1,155"
+"Department for Culture, Media and Sport","Department for Culture, Media and Sport Overall",0,0,30,60,0,[c],0,0,45,45,75,0,0,50,0,0,0,[c],0,0,95,5,0,0,645,20,10,0,10,10,30,25,0,0,0,0,"1,155"
+Department for Education,Department for Education (excl. agencies),0,0,160,215,0,35,0,0,860,110,465,0,[c],135,0,0,0,30,50,0,"1,760",115,0,0,"1,810",915,100,0,15,15,135,265,0,0,0,440,"7,630"
+Department for Education,Skills England,0,0,0,5,0,0,0,0,0,[c],[c],0,0,[c],0,0,0,0,0,0,25,[c],0,0,30,15,0,0,0,0,[c],5,0,0,0,140,235
+Department for Education,Standards and Testing Agency,0,0,[c],[c],0,0,0,0,10,0,5,0,0,[c],0,0,0,0,0,0,35,0,0,0,15,60,0,0,0,[c],[c],[c],0,0,0,5,140
+Department for Education,Teaching Regulation Agency,0,0,0,[c],0,0,0,0,[c],0,5,0,0,[c],0,0,0,0,0,0,60,0,0,0,[c],[c],0,0,0,0,0,0,0,0,0,5,80
+Department for Education,Department for Education Overall,0,0,160,225,0,35,0,0,870,110,475,0,[c],135,0,0,0,30,50,0,"1,875",120,0,0,"1,850",995,100,0,15,15,140,275,0,0,0,595,"8,090"
+Department for Energy Security and Net Zero,Department for Energy Security and Net Zero,0,0,40,110,25,20,0,0,170,195,145,25,0,170,0,0,0,35,5,0,290,135,0,0,"2,480",480,25,0,125,30,90,235,0,0,0,0,"4,830"
+Department for Energy Security and Net Zero,Department for Energy Security and Net Zero Overall,0,0,40,110,25,20,0,0,170,195,145,25,0,170,0,0,0,35,5,0,290,135,0,0,"2,480",480,25,0,125,30,90,235,0,0,0,0,"4,830"
+"Department for Environment, Food and Rural Affairs","Department for Environment, Food and Rural Affairs (excl. agencies)",0,[c],155,270,55,25,0,0,825,205,395,5,20,290,0,80,[c],60,0,0,295,35,30,0,"2,465",450,175,15,255,65,105,80,[c],25,95,0,"6,480"
+"Department for Environment, Food and Rural Affairs",Animal and Plant Health Agency,0,[c],120,20,0,0,0,0,40,0,20,[c],10,5,0,45,15,15,0,0,"1,835",[c],[c],0,40,95,[c],20,610,[c],0,[c],0,440,45,[c],"3,400"
+"Department for Environment, Food and Rural Affairs","Centre for Environment, Fisheries and Aquaculture Science",0,0,20,10,0,0,0,0,50,[c],5,0,0,10,0,0,0,0,0,0,0,0,0,0,0,40,0,0,450,[c],0,0,0,0,40,0,635
+"Department for Environment, Food and Rural Affairs",Rural Payments Agency,0,[c],0,40,0,0,0,0,15,[c],15,50,10,[c],0,70,0,10,0,0,"2,270",[c],[c],0,15,70,0,0,0,0,0,[c],0,0,10,[c],"2,595"
+"Department for Environment, Food and Rural Affairs",Veterinary Medicines Directorate,0,0,0,[c],0,0,0,0,5,[c],5,0,0,0,0,0,0,[c],0,0,60,0,0,0,10,10,0,0,40,0,0,0,0,30,[c],30,205
+"Department for Environment, Food and Rural Affairs","Department for Environment, Food and Rural Affairs Overall",0,5,295,345,55,25,0,0,935,205,445,60,40,310,0,195,15,85,0,0,"4,460",40,35,0,"2,535",665,180,35,"1,355",75,105,85,[c],495,195,40,"13,315"
+Estyn,Estyn,0,0,[c],5,0,0,0,0,[c],0,[c],0,0,[c],85,0,0,0,0,0,25,0,0,0,0,5,[c],0,0,0,[c],[c],0,0,0,0,140
+Estyn,Estyn Overall,0,0,[c],5,0,0,0,0,[c],0,[c],0,0,[c],85,0,0,0,0,0,25,0,0,0,0,5,[c],0,0,0,[c],[c],0,0,0,0,140
+Food Standards Agency,Food Standards Agency,0,0,15,50,5,55,0,0,60,10,50,0,0,40,0,15,5,[c],30,0,640,[c],0,0,345,35,[c],0,140,[c],10,[c],0,75,0,0,"1,590"
+Food Standards Agency,Food Standards Agency Overall,0,0,15,50,5,55,0,0,60,10,50,0,0,40,0,15,5,[c],30,0,640,[c],0,0,345,35,[c],0,140,[c],10,[c],0,75,0,0,"1,590"
+"Foreign, Commonwealth and Development Office","Foreign, Commonwealth and Development Office (excl. agencies)",0,0,115,135,70,0,80,0,250,215,215,0,0,580,0,0,60,80,55,0,855,0,0,0,"2,490","1,130",10,60,0,460,45,25,0,0,270,420,"7,620"
+"Foreign, Commonwealth and Development Office",FCDO Services,0,0,75,20,0,0,0,0,170,0,50,0,0,45,0,0,25,65,0,0,0,0,0,0,0,85,210,0,30,390,0,0,0,0,15,0,"1,185"
+"Foreign, Commonwealth and Development Office",Wilton Park,0,0,[c],5,0,0,0,0,5,0,5,0,0,[c],0,0,0,0,0,0,0,0,0,0,15,20,5,0,0,0,0,0,0,0,25,0,85
+"Foreign, Commonwealth and Development Office","Foreign, Commonwealth and Development Office Overall",0,0,195,160,70,0,80,0,430,215,265,0,0,630,0,0,85,145,55,0,855,0,0,0,"2,505","1,235",225,60,30,850,45,25,0,0,310,420,"8,890"
+Department of Health and Social Care,Department of Health and Social Care (excl. agencies),0,155,35,25,0,5,0,0,60,80,90,0,0,70,0,0,0,20,0,0,50,40,0,0,470,95,5,0,50,15,35,120,0,0,40,"1,815","3,275"
+Department of Health and Social Care,Medicines and Healthcare Products Regulatory Agency,0,115,[c],75,0,0,0,0,105,0,45,0,0,25,0,[c],40,25,30,0,305,50,[c],0,55,25,20,0,430,0,0,[c],0,0,0,255,"1,610"
+Department of Health and Social Care,UK Health Security Agency,0,325,125,85,0,5,0,0,410,15,145,0,10,195,0,20,0,75,10,0,"1,495",20,20,0,145,170,65,10,"2,395",25,20,25,[c],[c],[c],0,"5,820"
+Department of Health and Social Care,Department of Health and Social Care Overall,0,590,160,185,0,15,0,0,575,95,285,0,10,290,0,20,40,115,40,0,"1,850",105,20,0,670,285,95,10,"2,875",40,55,150,[c],[c],45,"2,070","10,705"
+HM Land Registry,HM Land Registry,0,0,35,35,0,25,0,0,805,0,50,0,0,95,0,0,5,15,135,0,"5,275",45,0,0,25,275,15,10,0,10,0,0,0,0,285,0,"7,150"
+HM Land Registry,HM Land Registry Overall,0,0,35,35,0,25,0,0,805,0,50,0,0,95,0,0,5,15,135,0,"5,275",45,0,0,25,275,15,10,0,10,0,0,0,0,285,0,"7,150"
+HM Revenue and Customs,HM Revenue and Customs (excl. agencies),0,0,55,305,0,"4,065",0,0,"3,495",190,"1,125",0,0,"1,005",0,520,60,65,505,0,"33,185",195,0,0,"1,490","3,110",285,0,0,385,150,375,"16,745",0,565,"3,345","71,210"
+HM Revenue and Customs,Valuation Office Agency,0,0,[c],35,0,0,0,0,45,5,40,0,0,130,0,0,0,30,0,0,"1,325",25,0,0,20,95,"2,490",[c],0,0,5,30,0,0,0,[c],"4,290"
+HM Revenue and Customs,HM Revenue and Customs Overall,0,0,60,340,0,"4,065",0,0,"3,540",195,"1,165",0,0,"1,135",0,520,60,95,505,0,"34,510",220,0,0,"1,510","3,205","2,770",[c],0,385,160,405,"16,745",0,565,"3,345","75,500"
+HM Treasury,HM Treasury (excl. agencies),0,0,20,60,0,0,0,0,25,155,100,0,0,115,0,0,0,20,0,0,165,0,0,0,"1,370",85,[c],0,0,0,0,5,0,0,15,[c],"2,140"
+HM Treasury,UK Debt Management Office,0,0,0,[c],5,0,0,10,35,[c],10,0,0,5,0,0,[c],[c],[c],0,10,0,0,0,10,5,[c],10,0,0,0,0,0,0,10,0,125
+HM Treasury,Government Internal Audit Agency,0,0,[c],5,0,0,0,0,[c],0,10,0,0,10,0,0,325,[c],0,0,30,0,0,0,5,[c],0,0,0,0,0,0,0,0,45,0,445
+HM Treasury,Office for Budget Responsibility,0,0,0,[c],0,0,0,0,0,50,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,55
+HM Treasury,HM Treasury Overall,0,0,25,70,5,0,0,10,60,205,115,0,0,130,0,0,330,20,[c],0,215,0,0,0,"1,390",95,5,10,0,0,0,5,0,0,70,[c],"2,765"
+Chancellor's other departments,Government Actuary's Department,140,0,[c],[c],0,0,0,0,40,0,10,0,0,10,0,0,0,0,0,0,0,0,0,0,0,[c],0,0,0,0,0,0,0,0,20,0,235
+Chancellor's other departments,National Savings and Investments,0,0,20,30,0,[c],0,0,60,0,45,0,0,15,0,0,0,[c],0,0,35,10,0,0,5,50,[c],0,0,[c],0,0,0,0,0,0,280
+Chancellor's other departments,Chancellor's other departments Overall,140,0,20,30,0,[c],0,0,105,0,55,0,0,25,0,0,0,[c],0,0,35,10,0,0,5,55,[c],0,0,[c],0,0,0,0,20,0,515
+Home Office,Home Office,0,0,185,180,0,210,0,0,"2,865",200,375,0,0,600,0,"1,420",0,115,0,0,"37,595",130,0,0,"2,705","2,175",110,0,135,345,215,150,0,0,"1,640",130,"51,470"
+Home Office,Home Office Overall,0,0,185,180,0,210,0,0,"2,865",200,375,0,0,600,0,"1,420",0,115,0,0,"37,595",130,0,0,"2,705","2,175",110,0,135,345,215,150,0,0,"1,640",130,"51,470"
+Ministry of Justice,Ministry of Justice (excl. agencies),0,0,275,260,0,0,0,0,"2,160",90,570,5,[c],"1,015",0,[c],[c],150,120,15,"1,120",145,0,0,"1,005",490,280,20,5,70,145,205,15,0,140,115,"8,420"
+Ministry of Justice,Criminal Injuries Compensation Authority,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,[c],5,0,370,0,0,0,[c],[c],0,0,0,0,0,0,0,0,0,5,385
+Ministry of Justice,HM Courts and Tribunals Service,0,0,10,50,0,0,0,0,535,[c],190,[c],0,130,0,0,5,50,"1,415",0,"13,520",20,0,0,40,150,105,5,0,0,20,15,[c],0,40,180,"16,490"
+Ministry of Justice,Legal Aid Agency,0,0,15,10,0,0,0,0,5,0,15,0,0,20,0,[c],[c],10,90,0,"1,135",0,0,0,10,[c],0,[c],[c],0,0,[c],0,0,5,30,"1,355"
+Ministry of Justice,HM Prison and Probation Service [Note 25],0,0,315,235,0,0,0,0,185,0,175,[c],[c],290,0,485,75,80,335,[c],"64,415",0,0,0,355,110,5,195,15,30,0,[c],0,0,"1,595",70,"68,980"
+Ministry of Justice,Office of the Public Guardian,0,0,[c],5,0,0,0,0,10,0,[c],0,0,[c],0,0,0,15,30,0,"1,735",0,0,0,20,5,[c],0,0,0,0,0,0,0,[c],35,"1,870"
+Ministry of Justice,Ministry of Justice Overall,0,0,610,560,0,0,0,0,"2,895",90,955,10,5,"1,460",0,490,90,305,"1,995",15,"82,290",165,0,0,"1,430",765,400,220,20,100,165,225,15,0,"1,780",440,"97,505"
+"Ministry of Housing, Communities and Local Government","Ministry of Housing, Communities and Local Government (excl. agencies)",0,0,30,100,0,5,0,0,430,75,130,0,0,100,0,[c],[c],45,0,0,245,20,100,0,"2,010",215,15,0,5,15,55,115,0,0,65,0,"3,780"
+"Ministry of Housing, Communities and Local Government",Planning Inspectorate,0,0,15,10,[c],0,0,0,135,0,15,0,0,30,0,0,0,15,0,0,330,0,15,505,0,5,0,0,0,0,0,5,0,0,0,0,"1,085"
+"Ministry of Housing, Communities and Local Government",Queen Elizabeth II Centre,0,0,5,[c],0,0,0,0,[c],0,5,0,0,[c],0,0,0,0,0,0,30,0,0,0,0,[c],0,0,0,0,0,0,0,0,0,0,50
+"Ministry of Housing, Communities and Local Government","Ministry of Housing, Communities and Local Government Overall",0,0,50,110,[c],5,0,0,570,75,150,0,0,135,0,[c],[c],60,0,0,605,20,115,505,"2,010",225,15,0,5,15,55,125,0,0,65,0,"4,915"
+The National Archives,The National Archives,0,0,15,10,0,0,0,0,140,0,15,0,0,25,0,0,0,200,0,0,135,0,0,0,5,[c],15,0,0,0,0,0,0,0,100,0,665
+The National Archives,The National Archives Overall,0,0,15,10,0,0,0,0,140,0,15,0,0,25,0,0,0,200,0,0,135,0,0,0,5,[c],15,0,0,0,0,0,0,0,100,0,665
+National Crime Agency,National Crime Agency,0,0,50,30,0,0,0,0,220,0,65,0,0,235,0,140,0,90,60,[c],"4,640",0,0,0,65,170,20,0,0,150,0,0,0,0,0,0,"5,940"
+National Crime Agency,National Crime Agency Overall,0,0,50,30,0,0,0,0,220,0,65,0,0,235,0,140,0,90,60,[c],"4,640",0,0,0,65,170,20,0,0,150,0,0,0,0,0,0,"5,940"
+Northern Ireland Office,Northern Ireland Office,0,0,0,10,0,0,0,0,[c],0,5,0,0,10,0,0,0,5,[c],0,60,[c],0,0,60,[c],0,0,0,[c],0,0,0,0,30,0,185
+Northern Ireland Office,Northern Ireland Office Overall,0,0,0,10,0,0,0,0,[c],0,5,0,0,10,0,0,0,5,[c],0,60,[c],0,0,60,[c],0,0,0,[c],0,0,0,0,30,0,185
+"Office for Standards in Education, Children's Services and Skills","Office for Standards in Education, Children's Services and Skills [Note 26]",0,0,15,35,0,0,0,0,140,0,35,0,0,70,"1,040",0,0,0,25,0,175,0,0,0,175,0,5,0,0,0,45,120,0,0,325,0,"2,205"
+"Office for Standards in Education, Children's Services and Skills","Office for Standards in Education, Children's Services and Skills Overall [Note 26]",0,0,15,35,0,0,0,0,140,0,35,0,0,70,"1,040",0,0,0,25,0,175,0,0,0,175,0,5,0,0,0,45,120,0,0,325,0,"2,205"
+Office of Gas and Electricity Markets,Office of Gas and Electricity Markets,0,0,0,80,0,0,60,0,255,35,55,0,0,65,0,0,0,0,105,0,485,0,0,0,520,105,0,0,25,0,0,0,0,0,515,0,"2,310"
+Office of Gas and Electricity Markets,Office of Gas and Electricity Markets Overall,0,0,0,80,0,0,60,0,255,35,55,0,0,65,0,0,0,0,105,0,485,0,0,0,520,105,0,0,25,0,0,0,0,0,515,0,"2,310"
+Office of Qualifications and Examinations Regulation,Office of Qualifications and Examinations Regulation,0,0,[c],10,0,0,0,0,30,[c],15,0,0,10,0,0,0,0,15,0,105,0,0,0,90,25,[c],0,0,[c],15,10,0,0,0,0,330
+Office of Qualifications and Examinations Regulation,Office of Qualifications and Examinations Regulation Overall,0,0,[c],10,0,0,0,0,30,[c],15,0,0,10,0,0,0,0,15,0,105,0,0,0,90,25,[c],0,0,[c],15,10,0,0,0,0,330
+Office of Rail and Road,Office of Rail and Road,0,0,[c],20,0,0,0,0,5,40,5,0,0,10,0,0,0,[c],15,0,135,0,0,0,85,[c],[c],0,30,[c],0,25,0,0,0,0,380
+Office of Rail and Road,Office of Rail and Road Overall,0,0,[c],20,0,0,0,0,5,40,5,0,0,10,0,0,0,[c],15,0,135,0,0,0,85,[c],[c],0,30,[c],0,25,0,0,0,0,380
+Office of the Secretary of State for Scotland,Office of the Secretary of State for Scotland (incl. Office of the Advocate General for Scotland),0,0,0,10,0,0,0,0,[c],[c],[c],0,0,[c],0,0,0,0,45,0,30,0,0,0,45,[c],0,0,0,0,0,0,0,0,[c],[c],140
+Office of the Secretary of State for Scotland,Office of the Secretary of State for Scotland Overall,0,0,0,10,0,0,0,0,[c],[c],[c],0,0,[c],0,0,0,0,45,0,30,0,0,0,45,[c],0,0,0,0,0,0,0,0,[c],[c],140
+"Department for Science, Innovation and Technology","Department for Science, Innovation and Technology (excl. agencies)",0,0,25,110,[c],[c],130,0,"1,110",105,100,0,0,95,0,5,0,20,[c],[c],195,20,0,0,"1,185",175,0,0,245,25,55,40,0,0,0,0,"3,650"
+"Department for Science, Innovation and Technology",Building Digital UK,0,0,25,20,[c],10,0,0,30,[c],20,0,0,5,0,0,0,0,0,0,10,[c],0,0,[c],100,0,0,0,0,[c],15,0,0,0,0,245
+"Department for Science, Innovation and Technology",Intellectual Property Office,0,0,10,45,0,0,0,0,285,25,35,0,0,55,0,35,[c],5,50,0,630,[c],0,0,125,35,0,[c],420,15,0,[c],0,0,0,0,"1,770"
+"Department for Science, Innovation and Technology",Met Office,0,0,30,40,0,0,20,0,525,0,25,0,0,90,0,0,10,15,15,0,455,0,0,0,0,110,20,0,835,5,0,0,0,0,335,0,"2,530"
+"Department for Science, Innovation and Technology",UK Space Agency,0,0,10,15,[c],0,0,0,[c],5,20,0,0,5,0,0,0,[c],0,0,40,0,0,0,95,105,0,0,15,5,0,0,0,0,0,0,320
+"Department for Science, Innovation and Technology","Department for Science, Innovation and Technology Overall",0,0,100,230,10,10,150,0,"1,950",135,195,0,0,255,0,40,10,45,65,[c],"1,335",25,0,0,"1,405",520,20,[c],"1,515",50,55,60,0,0,335,0,"8,515"
+Scottish Government,Scottish Government (excl. agencies),0,0,0,185,0,5,0,0,705,105,310,0,0,260,0,0,30,30,290,0,"1,915",25,0,0,"3,440",300,0,0,400,50,140,205,0,5,330,275,"9,015"
+Scottish Government,Accountant in Bankruptcy,0,0,0,[c],0,0,0,0,15,0,[c],0,0,[c],0,0,0,0,0,0,65,0,0,0,5,[c],0,0,0,0,0,[c],0,0,10,[c],105
+Scottish Government,Consumer Scotland,0,0,0,[c],[c],0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20,[c],0,0,0,0,[c],10,0,0,[c],0,40
+Scottish Government,Crown Office and Procurator Fiscal Service,0,0,0,15,25,0,5,0,75,0,0,0,0,60,0,0,0,20,825,0,"1,660",0,0,0,30,20,5,[c],0,[c],0,0,0,0,0,0,"2,735"
+Scottish Government,Disclosure Scotland,0,0,0,[c],0,0,0,0,30,0,20,0,0,5,0,0,0,[c],0,0,280,0,0,0,10,10,0,0,0,0,0,[c],0,0,[c],5,375
+Scottish Government,Education Scotland,0,0,0,10,0,0,0,0,40,0,[c],0,0,5,0,0,0,[c],0,0,165,0,0,0,[c],5,0,0,0,0,0,[c],0,0,125,5,370
+Scottish Government,Food Standards Scotland,0,0,0,10,0,10,0,0,5,[c],10,0,0,[c],0,0,0,0,0,0,145,0,0,0,30,5,0,0,25,0,[c],[c],0,40,[c],[c],290
+Scottish Government,Forestry and Land Scotland,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"1,095","1,095"
+Scottish Government,National Records of Scotland,0,0,0,5,0,0,0,0,65,0,20,0,0,10,0,0,0,60,0,0,130,0,0,0,10,20,0,0,[c],[c],[c],80,0,0,20,30,450
+Scottish Government,Office of the Scottish Charity Regulator,0,0,0,[c],0,0,0,0,0,0,[c],0,0,[c],0,0,0,[c],[c],0,30,0,0,0,[c],0,0,0,0,0,0,0,0,0,0,0,40
+Scottish Government,Registers of Scotland,0,0,15,20,0,0,0,0,180,0,30,0,0,50,0,0,5,0,5,0,805,0,0,0,15,15,10,[c],0,5,0,0,0,0,15,0,"1,175"
+Scottish Government,Revenue Scotland,0,0,0,5,0,0,0,0,10,0,[c],0,0,[c],0,0,0,[c],5,0,45,0,0,0,0,10,0,0,0,0,0,[c],20,0,0,0,110
+Scottish Government,Scottish Courts and Tribunals Service,0,0,0,10,0,0,0,0,105,0,50,0,0,45,0,0,[c],15,40,0,"1,775",0,0,0,0,0,25,20,0,0,0,5,0,0,0,0,"2,095"
+Scottish Government,Scottish Fiscal Commission,0,0,0,0,0,0,0,0,0,[c],[c],0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,[c],0,0,[c],0,0,0,10,25
+Scottish Government,Scottish Forestry,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255
+Scottish Government,Scottish Housing Regulator,0,0,0,0,0,0,0,0,[c],0,10,0,0,0,0,0,0,0,0,0,40,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,55
+Scottish Government,Scottish Prison Service,0,0,45,[c],[c],0,[c],0,55,0,55,0,0,105,0,0,[c],35,15,0,"4,075",0,0,0,35,35,215,0,0,0,[c],0,0,0,525,0,"5,195"
+Scottish Government,Scottish Public Pensions Agency,0,0,0,[c],0,0,0,0,45,0,20,0,0,15,0,0,0,0,0,0,305,0,0,0,15,[c],0,0,0,0,0,0,0,0,10,10,435
+Scottish Government,Social Security Scotland,0,0,0,25,0,110,0,0,565,0,95,0,0,140,0,0,0,20,0,0,"3,070",15,0,0,0,65,0,0,245,10,10,35,0,0,60,15,"4,475"
+Scottish Government,Student Awards Agency for Scotland,0,0,0,[c],0,10,0,0,50,0,20,0,0,5,0,0,0,[c],0,0,130,0,0,0,10,5,0,0,0,0,0,[c],0,0,[c],[c],240
+Scottish Government,Transport Scotland,0,0,0,15,0,0,0,0,10,10,35,0,0,5,0,0,0,[c],[c],0,155,0,0,0,135,60,0,0,105,0,5,5,0,0,35,20,605
+Scottish Government,Scottish Government Overall,0,0,55,315,30,135,5,0,"1,960",120,690,0,0,725,0,0,45,195,"1,185",0,"14,790",35,0,0,"3,760",555,255,20,785,65,165,355,20,45,"1,140","1,725","29,185"
+Department for Transport,Department for Transport (excl. agencies),0,0,105,100,[c],[c],0,0,155,155,145,0,[c],155,0,0,0,20,[c],0,205,30,65,0,"1,280",440,25,0,95,125,50,80,0,0,80,70,"3,385"
+Department for Transport,Driver and Vehicle Licensing Agency,0,45,170,75,0,10,0,0,785,0,155,0,0,160,0,0,0,0,0,0,"4,355",0,0,0,100,95,75,0,0,150,0,0,0,0,15,0,"6,185"
+Department for Transport,Driver and Vehicle Standards Agency,0,0,45,50,0,75,0,0,325,0,70,0,0,115,0,0,0,5,15,0,"3,450",0,0,0,120,75,65,5,905,15,0,0,0,0,0,0,"5,350"
+Department for Transport,Maritime and Coastguard Agency,0,5,15,25,0,0,0,0,110,0,30,0,0,40,0,0,15,[c],[c],0,860,0,0,0,190,0,10,0,0,0,0,0,0,0,[c],0,"1,315"
+Department for Transport,Vehicle Certification Agency,0,0,[c],5,0,0,0,0,20,0,10,0,0,5,0,0,[c],0,0,0,110,0,0,0,0,[c],0,0,115,0,0,0,0,0,0,5,275
+Department for Transport,Active Travel England,0,0,0,10,0,0,0,0,10,[c],[c],0,0,[c],0,0,0,0,0,0,10,[c],15,0,10,15,0,0,20,0,[c],0,0,0,0,0,105
+Department for Transport,Department for Transport Overall,0,50,340,265,[c],90,0,0,"1,410",160,415,0,[c],475,0,0,20,30,20,0,"8,985",30,80,0,"1,700",630,170,5,"1,140",290,50,80,0,0,90,75,"16,610"
+UK Export Finance,UK Export Finance,0,0,[c],25,0,0,0,0,85,0,60,0,0,30,0,0,5,40,35,0,210,10,0,0,15,15,0,30,0,10,15,0,0,0,0,0,590
+UK Export Finance,UK Export Finance Overall,0,0,[c],25,0,0,0,0,85,0,60,0,0,30,0,0,5,40,35,0,210,10,0,0,15,15,0,30,0,10,15,0,0,0,0,0,590
+UK Statistics Authority,UK Statistics Authority,0,0,20,80,[c],0,0,0,"1,015",160,60,0,20,140,0,0,[c],20,0,0,"2,725",30,0,0,80,230,15,0,0,75,605,695,0,0,0,0,"5,980"
+UK Statistics Authority,UK Statistics Authority Overall,0,0,20,80,[c],0,0,0,"1,015",160,60,0,20,140,0,0,[c],20,0,0,"2,725",30,0,0,80,230,15,0,0,75,605,695,0,0,0,0,"5,980"
+UK Supreme Court,UK Supreme Court,0,0,0,5,0,0,0,0,5,0,[c],0,0,[c],0,0,0,[c],15,0,15,0,0,0,[c],0,[c],0,0,0,0,0,0,0,0,0,55
+UK Supreme Court,UK Supreme Court Overall,0,0,0,5,0,0,0,0,5,0,[c],0,0,[c],0,0,0,[c],15,0,15,0,0,0,[c],0,[c],0,0,0,0,0,0,0,0,0,55
+Office of the Secretary of State for Wales,Office of the Secretary of State for Wales,0,0,0,5,0,0,0,0,0,0,[c],0,0,[c],0,0,0,0,0,0,0,0,0,0,35,0,0,0,0,0,0,0,0,0,0,0,45
+Office of the Secretary of State for Wales,Office of the Secretary of State for Wales Overall,0,0,0,5,0,0,0,0,0,0,[c],0,0,[c],0,0,0,0,0,0,0,0,0,0,35,0,0,0,0,0,0,0,0,0,0,0,45
+Water Services Regulation Authority,Water Services Regulation Authority,0,0,0,40,0,0,0,0,55,60,45,0,0,25,0,0,0,0,25,0,60,0,0,0,85,25,0,0,55,0,0,0,0,0,[c],0,480
+Water Services Regulation Authority,Water Services Regulation Authority Overall,0,0,0,40,0,0,0,0,55,60,45,0,0,25,0,0,0,0,25,0,60,0,0,0,85,25,0,0,55,0,0,0,0,0,[c],0,480
+Welsh Government,Welsh Government (excl. agencies),0,185,70,175,0,0,0,0,260,55,325,0,0,200,0,0,20,100,205,0,"1,510",0,115,10,"1,655",100,65,0,100,0,115,110,0,10,560,145,"6,095"
+Welsh Government,Welsh Revenue Authority,0,0,0,5,0,0,0,0,30,0,10,0,0,5,0,0,[c],0,5,0,35,0,0,0,10,0,0,0,0,0,0,0,10,0,0,15,125
+Welsh Government,Welsh Government Overall,0,185,70,180,0,0,0,0,290,55,335,0,0,205,0,0,20,100,210,0,"1,545",0,115,10,"1,660",100,65,0,100,0,115,110,10,10,560,165,"6,220"
+Department for Work and Pensions,Department for Work and Pensions (excl. agencies) [Note 21],0,45,225,155,0,"8,435",0,"2,620","4,515",220,"1,550",25,0,"1,925",0,25,5,80,0,80,"69,335",160,[c],0,"1,290","1,390",440,120,0,460,210,235,0,0,20,80,"93,655"
+Department for Work and Pensions,Health and Safety Executive,0,0,25,50,0,0,0,0,135,10,30,0,0,65,0,0,0,25,75,0,"2,170",0,0,0,95,20,15,0,535,10,0,20,0,0,0,0,"3,270"
+Department for Work and Pensions,Department for Work and Pensions Overall,0,45,250,200,0,"8,435",0,"2,620","4,650",230,"1,580",25,0,"1,990",0,25,5,105,75,80,"71,505",160,[c],0,"1,385","1,410",455,120,535,470,210,255,0,0,20,80,"96,930"
+Overall Civil Service,Overall Civil Service,140,"2,625","7,265","5,580",225,"13,660",380,"2,630","31,475","3,170","11,665",180,590,"12,890","1,125","3,805",765,"3,060","11,800",110,"300,080","1,950",400,520,"37,275","21,460","8,255",565,"16,295","10,130","2,495","3,990","16,790",620,"12,460","11,400","557,825"
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,

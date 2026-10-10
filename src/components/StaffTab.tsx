@@ -127,7 +127,9 @@ export default function StaffTab({ staffProfile, onSelectElement }: StaffTabProp
   const { pieData: profPieData, colourMap: profColourMap } = collapseSmall(profAllEntries, profTotal)
 
   // Determine which chart views are available
-  const hasOrgs = orgs.length > 0
+  // "By Organisation" only makes sense in whole-group scope — the core
+  // department (excl. agencies) has no sub-orgs to break down.
+  const hasOrgs = orgs.length > 0 && effectiveScope === 'group'
   const hasProfessions = profAllEntries.length > 0
 
   // Fall back if selected view has no data
@@ -310,14 +312,14 @@ export default function StaffTab({ staffProfile, onSelectElement }: StaffTabProp
       <div className="staff-footer">
         <a
           className="staff-source-link"
-          href="https://www.gov.uk/government/statistics/civil-service-statistics-2025"
+          href="https://www.gov.uk/government/statistics/civil-service-statistics-2026"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Civil Service Statistics 2025 ↗
+          Civil Service Statistics 2026 ↗
         </a>
         <p className="staff-notes">
-          Headcount as at 31 March 2025. Figures rounded to nearest 5.
+          Headcount as at 31 March 2026. Figures rounded to nearest 5.
           Cells with fewer than 5 staff are suppressed (shown as 0).
           'Other' grade includes unclassified and unreported grades.
           Profession data from Table 8; grade data from Table 20.
