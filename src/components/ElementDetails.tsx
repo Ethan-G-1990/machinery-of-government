@@ -4,7 +4,7 @@ import { jurisdictionInfo } from '../data/jurisdictions'
 import { getElementColor } from '../utils/colors'
 import { powerProfiles } from '../data/powers'
 import { budgetProfiles } from '../data/budgets'
-import { getStaffProfile } from '../data/staffing'
+import { getStaffProfileSeries } from '../data/staffing'
 import { professionProfiles } from '../data/professions'
 import BudgetTab from './BudgetTab'
 import StaffTab from './StaffTab'
@@ -52,7 +52,8 @@ export default function ElementDetails({ elementId, onSelectElement, onClose, on
   const connected = getConnectedElements(elementId)
   const powerProfile = powerProfiles[elementId]
   const budgetProfile = budgetProfiles[elementId]
-  const staffProfile = getStaffProfile(elementId)
+  const staffHistory = getStaffProfileSeries(elementId)
+  const staffProfile = staffHistory[staffHistory.length - 1]
   const professionProfile = professionProfiles[elementId]
 
   if (!element) {
@@ -557,7 +558,9 @@ export default function ElementDetails({ elementId, onSelectElement, onClose, on
         {activeTab === 'info' && renderInfo()}
         {activeTab === 'powers' && renderPowers()}
         {activeTab === 'budget' && <BudgetTab budgetProfile={budgetProfile} onSelectElement={onSelectElement} />}
-        {activeTab === 'staff' && <StaffTab staffProfile={staffProfile} onSelectElement={onSelectElement} />}
+        {/* key resets the tab's year / scope / chart state when the selected
+            element changes, so a new organisation always opens on its latest year */}
+        {activeTab === 'staff' && <StaffTab key={elementId} staffHistory={staffHistory} onSelectElement={onSelectElement} />}
       </div>
     </div>
   )

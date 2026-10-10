@@ -32,6 +32,21 @@
   color: #555;
 }
 
+/* Year-on-year change beneath the headline figure */
+.staff-change {
+  margin-top: 0.3rem;
+  font-size: 0.78rem;
+  color: #7f8c8d;
+}
+
+.staff-change-up {
+  color: #1e8449;
+}
+
+.staff-change-down {
+  color: #c0392b;
+}
+
 /* ── Chart section ──────────────────────────────────────────────────────── */
 .staff-chart-section {
   background: #f8f9fa;
@@ -66,6 +81,22 @@
   text-align: right;
   padding: 0.3rem 0 0.3rem 0.5rem;
   white-space: nowrap;
+}
+
+/* ── Trend table (headcount over time) ──────────────────────────────────── */
+.stt-row {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.stt-row:hover {
+  background: #eaf2fa;
+}
+
+.stt-row-active .bbt-label,
+.stt-row-active .bbt-amount {
+  font-weight: 700;
+  color: #2980b9;
 }
 
 /* ── Org breakdown table ────────────────────────────────────────────────── */

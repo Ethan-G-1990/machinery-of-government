@@ -965,3 +965,42 @@ export function getStaffProfile(elementId: string): StaffProfile | undefined {
 export function getStaffProfileHistory(elementId: string): StaffProfile[] {
   return staffProfiles[elementId] ?? []
 }
+
+// Returns every year of staffing data available for an element, oldest first.
+// Unlike getStaffProfileHistory() this also covers elements that appear only
+// as a sub-org row inside a parent department's orgs[] — one synthesised
+// profile per parent year in which the sub-org is listed. Returns an empty
+// array if the element has no staffing data at all.
+export function getStaffProfileSeries(elementId: string): StaffProfile[] {
+  const history = staffProfiles[elementId]
+  if (history && history.length > 0) return history
+
+  for (const parentHistory of Object.values(staffProfiles)) {
+    if (parentHistory[0]?.elementId === elementId) continue
+
+    // Find the labels this sub-org is listed under across the parent's years.
+    // Earlier years often leave orgId blank (it was only backfilled for the
+    // most recent release) and the Table 20 label can be renamed between
+    // years, so collect every label that any orgId match used and treat
+    // those as aliases when scanning years without an orgId.
+    const aliases = new Set<string>()
+    for (const parent of parentHistory) {
+      for (const org of parent.orgs) {
+        if (org.orgId === elementId) aliases.add(org.label)
+      }
+    }
+    if (aliases.size === 0) continue
+
+    const series: StaffProfile[] = []
+    for (const parent of parentHistory) {
+      const org = parent.orgs.find(o => o.orgId === elementId)
+        ?? parent.orgs.find(o => !o.orgId && aliases.has(o.label))
+      if (org) {
+        series.push({ elementId, year: parent.year, grades: org.grades, orgs: [] })
+      }
+    }
+    if (series.length > 0) return series
+  }
+
+  return []
+}
