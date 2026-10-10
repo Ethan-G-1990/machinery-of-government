@@ -192,83 +192,49 @@
 }
 
 /* ── Tab bar ──────────────────────────────────────────────────────────────── */
+/* Sticks to the top of the scrolling pane so tabs stay reachable on long lists.
+   Bleeds into the pane's side padding so scrolled content doesn't show either side. */
 .tab-bar-wrapper {
-  position: relative;
-  margin-bottom: 1.5rem;
-}
-
-.tab-bar-wrapper::after {
-  content: '';
-  position: absolute;
+  position: sticky;
   top: 0;
-  right: 0;
-  bottom: 2px;
-  width: 3rem;
-  background: linear-gradient(to right, transparent, white);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s;
+  z-index: 5;
+  margin: 0 calc(-1 * var(--pane-pad-x, 0px)) 1.5rem;
+  padding: 0 var(--pane-pad-x, 0px);
+  background: white;
 }
 
-.tab-bar-wrapper.tabs-overflow::after {
-  opacity: 1;
-}
-
-.tab-bar-wrapper.tabs-at-end::after {
-  opacity: 0;
-}
-
-.tab-bar-more {
-  position: absolute;
-  top: 50%;
-  right: 0.4rem;
-  transform: translateY(-50%);
-  font-size: 0.7rem;
-  color: #2980b9;
-  font-weight: 700;
-  pointer-events: none;
-  line-height: 1;
-  transition: opacity 0.2s;
-  opacity: 0;
-}
-
-.tab-bar-wrapper.tabs-overflow .tab-bar-more {
-  opacity: 1;
-}
-
-.tab-bar-wrapper.tabs-at-end .tab-bar-more {
-  opacity: 0;
-}
-
+/* Equal-width tabs with the count stacked under the label, so every tab fits at any pane width */
 .tab-bar {
   display: flex;
   align-items: stretch;
-  height: 2.5rem;
+  height: 3rem;
   border-bottom: 2px solid #e0e0e0;
   gap: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.tab-bar::-webkit-scrollbar {
-  display: none;
 }
 
 .tab-button {
-  flex: 0 0 auto;
+  flex: 1 1 0;
+  min-width: 0;
   background: none;
   border: none;
   box-shadow: inset 0 -2px 0 transparent;
-  padding: 0.6rem 0.75rem;
+  padding: 0.3rem 0.25rem;
   font-size: 0.88rem;
   font-weight: 600;
   color: #7f8c8d;
   cursor: pointer;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
+  gap: 0.15rem;
+  white-space: nowrap;
   transition: color 0.15s, box-shadow 0.15s;
+}
+
+.tab-button:focus-visible {
+  outline: 2px solid #2980b9;
+  outline-offset: -2px;
 }
 
 .tab-button:hover {
@@ -285,13 +251,16 @@
 }
 
 .tab-count {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 700;
   background: #ecf0f1;
   color: #7f8c8d;
-  padding: 0.1rem 0.4rem;
+  padding: 0 0.4rem;
   border-radius: 10px;
   line-height: 1.4;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tab-button-active .tab-count {
@@ -504,12 +473,11 @@
   }
 
   .tab-bar {
-    height: 2.75rem;
+    height: 3.25rem;
   }
 
   .tab-button {
     min-height: 44px;
-    padding: 0.7rem 1rem;
     font-size: 0.92rem;
   }
 

@@ -13,7 +13,11 @@ import { getElementColor } from './utils/colors'
 import type { Jurisdiction } from './data/jurisdictions'
 import { elementMatchesJurisdiction, jurisdictionInfo } from './data/jurisdictions'
 import JurisdictionFilter from './components/JurisdictionFilter'
+import PaneResizer from './components/PaneResizer'
 import './App.css'
+
+type PaneKey = 'category' | 'element' | 'search' | 'info' | 'categories'
+const PANE_WIDTHS_STORAGE_KEY = 'mog-pane-widths'
 
 // Tiny SVG shape matching the Cytoscape node shape for each subtype
 function SubtypeShape({ category, subtype }: { category: string; subtype: string }) {
@@ -100,6 +104,27 @@ function App() {
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)
   }, [])
+
+  // User-resized side pane widths (desktop only); absent key = CSS default width
+  const [paneWidths, setPaneWidths] = useState<Partial<Record<PaneKey, number>>>(() => {
+    try { return JSON.parse(localStorage.getItem(PANE_WIDTHS_STORAGE_KEY) ?? '{}') } catch { return {} }
+  })
+  useEffect(() => {
+    try { localStorage.setItem(PANE_WIDTHS_STORAGE_KEY, JSON.stringify(paneWidths)) } catch { /* storage unavailable */ }
+  }, [paneWidths])
+
+  const paneStyle = (key: PaneKey) =>
+    paneWidths[key] ? { '--pane-width': `${paneWidths[key]}px` } as React.CSSProperties : undefined
+
+  const paneResizer = (key: PaneKey, edge: 'left' | 'right', order: number, label: string) => !isMobile && (
+    <PaneResizer
+      edge={edge}
+      order={order}
+      label={label}
+      onResize={(w) => setPaneWidths(p => ({ ...p, [key]: w }))}
+      onReset={() => setPaneWidths(p => { const next = { ...p }; delete next[key]; return next })}
+    />
+  )
 
   // Bottom sheet state: 'closed' | 'partial' | 'full'
   type SheetState = 'closed' | 'partial' | 'full'
@@ -232,39 +257,50 @@ function App() {
       </header>
 
       <div className="app-container">
+        {/* Each side pane is followed (left panes) or preceded (right panes) by its resize
+            handle, sharing the pane's flex order so the handle sits on the chart-facing edge */}
         {selectedCategory && (
-          <aside className="details-panel category-pane">
-            <CategoryInfo
-              category={selectedCategory.category}
-              subtype={selectedCategory.subtype}
-              onClose={() => setSelectedCategory(null)}
-              onSelectElement={(id) => selectElement(id, true)}
-            />
-          </aside>
+          <>
+            <aside className="details-panel category-pane" style={paneStyle('category')}>
+              <CategoryInfo
+                category={selectedCategory.category}
+                subtype={selectedCategory.subtype}
+                onClose={() => setSelectedCategory(null)}
+                onSelectElement={(id) => selectElement(id, true)}
+              />
+            </aside>
+            {paneResizer('category', 'right', 1, 'category pane')}
+          </>
         )}
 
         {selectedTagId && (
-          <aside className="details-panel category-pane">
-            <TagInfo
-              tagId={selectedTagId}
-              onClose={() => setSelectedTagId(null)}
-              onSelectElement={(id) => selectElement(id, true)}
-            />
-          </aside>
+          <>
+            <aside className="details-panel category-pane" style={paneStyle('category')}>
+              <TagInfo
+                tagId={selectedTagId}
+                onClose={() => setSelectedTagId(null)}
+                onSelectElement={(id) => selectElement(id, true)}
+              />
+            </aside>
+            {paneResizer('category', 'right', 1, 'tag pane')}
+          </>
         )}
 
 
         {/* Desktop element pane — hidden on mobile (bottom sheet used instead) */}
         {!isMobile && selectedElementId && elementPaneVisible && (
-          <aside className="details-panel element-pane">
-            <ElementDetails
-              elementId={selectedElementId}
-              onSelectElement={selectElement}
-              onClose={closeElementPane}
-              onOpenCategory={(category, subtype) => setSelectedCategory({ category, subtype })}
-              onOpenTag={(tagId) => setSelectedTagId(tagId)}
-            />
-          </aside>
+          <>
+            <aside className="details-panel element-pane" style={paneStyle('element')}>
+              <ElementDetails
+                elementId={selectedElementId}
+                onSelectElement={selectElement}
+                onClose={closeElementPane}
+                onOpenCategory={(category, subtype) => setSelectedCategory({ category, subtype })}
+                onOpenTag={(tagId) => setSelectedTagId(tagId)}
+              />
+            </aside>
+            {paneResizer('element', 'right', 2, 'details pane')}
+          </>
         )}
 
         <div className="chart-container" style={{ position: 'relative' }}>
@@ -443,36 +479,45 @@ function App() {
         </div>
 
         {searchOpen && (
-          <aside className="details-panel search-panel">
-            <SearchPane
-              onSelectElement={selectElement}
-              onClose={() => { setSearchOpen(false); setSearchHighlightIds(null) }}
-              onResultsChange={setSearchHighlightIds}
-            />
-          </aside>
+          <>
+            {paneResizer('search', 'left', 4, 'search pane')}
+            <aside className="details-panel search-panel" style={paneStyle('search')}>
+              <SearchPane
+                onSelectElement={selectElement}
+                onClose={() => { setSearchOpen(false); setSearchHighlightIds(null) }}
+                onResultsChange={setSearchHighlightIds}
+              />
+            </aside>
+          </>
         )}
 
         {infoOpen && (
-          <aside className="details-panel info-panel">
-            <InfoPane onClose={() => setInfoOpen(false)} />
-          </aside>
+          <>
+            {paneResizer('info', 'left', 5, 'help pane')}
+            <aside className="details-panel info-panel" style={paneStyle('info')}>
+              <InfoPane onClose={() => setInfoOpen(false)} />
+            </aside>
+          </>
         )}
 
         {categoriesOpen && (
-          <aside className="details-panel search-panel">
-            <CategoriesPane
-              onOpenCategory={(category, subtype) => {
-                setSelectedCategory({ category, subtype })
-                setCategoriesOpen(false)
-              }}
-              onOpenTag={(tagId) => {
-                setSelectedTagId(tagId)
-                setCategoriesOpen(false)
-              }}
-              onClose={() => setCategoriesOpen(false)}
-              isMobile={isMobile}
-            />
-          </aside>
+          <>
+            {paneResizer('categories', 'left', 4, 'categories pane')}
+            <aside className="details-panel search-panel" style={paneStyle('categories')}>
+              <CategoriesPane
+                onOpenCategory={(category, subtype) => {
+                  setSelectedCategory({ category, subtype })
+                  setCategoriesOpen(false)
+                }}
+                onOpenTag={(tagId) => {
+                  setSelectedTagId(tagId)
+                  setCategoriesOpen(false)
+                }}
+                onClose={() => setCategoriesOpen(false)}
+                isMobile={isMobile}
+              />
+            </aside>
+          </>
         )}
       </div>
 

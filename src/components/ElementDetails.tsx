@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { getElement, getConnectedElements, tagDefinitions } from '../data/elements'
 import { jurisdictionInfo } from '../data/jurisdictions'
 import { getElementColor } from '../utils/colors'
@@ -24,29 +24,22 @@ interface ElementDetailsProps {
 export default function ElementDetails({ elementId, onSelectElement, onClose, onOpenCategory, onOpenTag, isMobile }: ElementDetailsProps) {
   const [activeTab, setActiveTab] = useState<Tab>('info')
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set())
-  const [tabsOverflow, setTabsOverflow] = useState(false)
-  const [tabsAtEnd, setTabsAtEnd] = useState(false)
   const [activePowerTypes, setActivePowerTypes] = useState<Set<string>>(new Set(['power', 'duty', 'function', 'responsibility']))
-  const tabBarRef = useRef<HTMLDivElement>(null)
+  const tabBarWrapperRef = useRef<HTMLDivElement>(null)
+  const tabContentRef = useRef<HTMLDivElement>(null)
 
-  const checkTabs = useCallback(() => {
-    const el = tabBarRef.current
-    if (!el) return
-    const overflows = el.scrollWidth > el.clientWidth + 2
-    setTabsOverflow(overflows)
-    setTabsAtEnd(!overflows || el.scrollLeft + el.clientWidth >= el.scrollWidth - 2)
+  const selectTab = useCallback((tab: Tab) => {
+    setActiveTab(tab)
+    // If the pane is scrolled so the sticky tab bar is pinned over earlier content,
+    // jump back so the newly selected tab starts at its top rather than mid-way down
+    const wrapper = tabBarWrapperRef.current
+    const content = tabContentRef.current
+    const scroller = wrapper?.closest('.details-panel, .bottom-sheet-content')
+    if (!wrapper || !content || !scroller) return
+    const gap = parseFloat(getComputedStyle(wrapper).marginBottom) || 0
+    const overlap = content.getBoundingClientRect().top - (wrapper.getBoundingClientRect().bottom + gap)
+    if (overlap < 0) scroller.scrollTop += overlap
   }, [])
-
-  useEffect(() => {
-    const el = tabBarRef.current
-    if (!el) return
-    checkTabs()
-    const ro = new ResizeObserver(checkTabs)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [checkTabs])
-
-  const handleTabScroll = useCallback(() => checkTabs(), [checkTabs])
 
   const element = getElement(elementId)
   const connected = getConnectedElements(elementId)
@@ -484,6 +477,31 @@ export default function ElementDetails({ elementId, onSelectElement, onClose, on
     )
   }
 
+  // ── Tab bar ────────────────────────────────────────────────────────────────
+  const tabs: { id: Tab; label: string; count?: string; empty?: boolean }[] = [
+    { id: 'info', label: 'Info' },
+    { id: 'powers', label: 'Powers', count: powerProfile ? String(powerProfile.powers.length) : undefined, empty: !powerProfile },
+    ...(element.category !== 'official' ? [
+      { id: 'budget' as Tab, label: 'Budget', count: budgetProfile?.budgets[0]?.financialYear, empty: !budgetProfile },
+      { id: 'staff' as Tab, label: 'Staff', count: staffProfile?.grades.total.toLocaleString(), empty: !staffProfile },
+    ] : []),
+  ]
+  // Budget/Staff aren't offered for officials — fall back to Info if one was open
+  const currentTab: Tab = tabs.some(t => t.id === activeTab) ? activeTab : 'info'
+
+  // WAI-ARIA tabs pattern: arrow keys / Home / End move between tabs
+  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const i = tabs.findIndex(t => t.id === currentTab)
+    const next =
+      e.key === 'ArrowRight' ? (i + 1) % tabs.length :
+      e.key === 'ArrowLeft' ? (i - 1 + tabs.length) % tabs.length :
+      e.key === 'Home' ? 0 :
+      e.key === 'End' ? tabs.length - 1 : null
+    if (next === null) return
+    e.preventDefault()
+    selectTab(tabs[next].id)
+    e.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]')[next]?.focus()
+  }
 
   return (
     <div className="element-details">
@@ -509,58 +527,33 @@ export default function ElementDetails({ elementId, onSelectElement, onClose, on
         </button>
       </div>
 
-      <div className={`tab-bar-wrapper${tabsOverflow ? ' tabs-overflow' : ''}${tabsAtEnd ? ' tabs-at-end' : ''}`}>
-      <span className="tab-bar-more" aria-hidden="true">▶</span>
-      <div className="tab-bar" role="tablist" ref={tabBarRef} onScroll={handleTabScroll}>
-        <button
-          className={`tab-button${activeTab === 'info' ? ' tab-button-active' : ''}`}
-          role="tab"
-          aria-selected={activeTab === 'info'}
-          onClick={() => setActiveTab('info')}
-        >
-          Info
-        </button>
-        <button
-          className={`tab-button${activeTab === 'powers' ? ' tab-button-active' : ''}${!powerProfile ? ' tab-button-empty' : ''}`}
-          role="tab"
-          aria-selected={activeTab === 'powers'}
-          onClick={() => setActiveTab('powers')}
-        >
-          Powers
-          {powerProfile && <span className="tab-count">{powerProfile.powers.length}</span>}
-        </button>
-        {element.category !== 'official' && (
+      <div className="tab-bar-wrapper" ref={tabBarWrapperRef}>
+      <div className="tab-bar" role="tablist" aria-label="Element details" onKeyDown={handleTabKeyDown}>
+        {tabs.map(tab => (
           <button
-            className={`tab-button${activeTab === 'budget' ? ' tab-button-active' : ''}${!budgetProfile ? ' tab-button-empty' : ''}`}
+            key={tab.id}
+            id={`element-tab-${tab.id}`}
+            className={`tab-button${currentTab === tab.id ? ' tab-button-active' : ''}${tab.empty ? ' tab-button-empty' : ''}`}
             role="tab"
-            aria-selected={activeTab === 'budget'}
-            onClick={() => setActiveTab('budget')}
+            aria-selected={currentTab === tab.id}
+            aria-controls="element-tabpanel"
+            tabIndex={currentTab === tab.id ? 0 : -1}
+            onClick={() => selectTab(tab.id)}
           >
-            Budget
-            {budgetProfile && <span className="tab-count">{budgetProfile.budgets[0]?.financialYear}</span>}
+            {tab.label}
+            {tab.count && <span className="tab-count">{tab.count}</span>}
           </button>
-        )}
-        {element.category !== 'official' && (
-          <button
-            className={`tab-button${activeTab === 'staff' ? ' tab-button-active' : ''}${!staffProfile ? ' tab-button-empty' : ''}`}
-            role="tab"
-            aria-selected={activeTab === 'staff'}
-            onClick={() => setActiveTab('staff')}
-          >
-            Staff
-            {staffProfile && <span className="tab-count">{staffProfile.grades.total.toLocaleString()}</span>}
-          </button>
-        )}
+        ))}
       </div>
       </div>
 
-      <div className="tab-content">
-        {activeTab === 'info' && renderInfo()}
-        {activeTab === 'powers' && renderPowers()}
-        {activeTab === 'budget' && <BudgetTab budgetProfile={budgetProfile} onSelectElement={onSelectElement} />}
+      <div className="tab-content" ref={tabContentRef} id="element-tabpanel" role="tabpanel" aria-labelledby={`element-tab-${currentTab}`}>
+        {currentTab === 'info' && renderInfo()}
+        {currentTab === 'powers' && renderPowers()}
+        {currentTab === 'budget' && <BudgetTab budgetProfile={budgetProfile} onSelectElement={onSelectElement} />}
         {/* key resets the tab's year / scope / chart state when the selected
             element changes, so a new organisation always opens on its latest year */}
-        {activeTab === 'staff' && <StaffTab key={elementId} staffHistory={staffHistory} onSelectElement={onSelectElement} />}
+        {currentTab === 'staff' && <StaffTab key={elementId} staffHistory={staffHistory} onSelectElement={onSelectElement} />}
       </div>
     </div>
   )

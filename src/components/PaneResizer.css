@@ -1,0 +1,42 @@
+/* Zero-width flex item with a wider invisible hit area straddling the pane edge */
+.pane-resize-handle {
+  position: relative;
+  flex: 0 0 8px;
+  margin: 0 -4px;
+  z-index: 20;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.pane-resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 3px;
+  width: 2px;
+  background: transparent;
+  transition: background 0.15s;
+}
+
+.pane-resize-handle:hover::after,
+.pane-resize-handle:focus-visible::after,
+.pane-resize-handle:active::after {
+  background: #2980b9;
+}
+
+.pane-resize-handle:focus-visible {
+  outline: none;
+}
+
+body.pane-resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+
+/* Below 1025px panes are fixed-width overlays (or mobile sheets), so resizing is disabled */
+@media (max-width: 1024px) {
+  .pane-resize-handle {
+    display: none;
+  }
+}

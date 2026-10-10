@@ -118,7 +118,7 @@ Toggle cycles: focus → radial → gravity → focus.
 
 ### Panels and header (`App.tsx` / `App.css`)
 
-Five panels share a flex row via CSS `order`: `category-pane` (1, CategoryInfo/TagInfo), `element-pane` (2, ElementDetails), `chart-container` (3, chart + view toggle), `search-panel` (4, SearchPane), `info-panel` (5, InfoPane/CategoriesPane). The view toggle sits absolutely inside `.chart-container`, not inside any chart component. Header buttons (Dark, Help, Categories, Search) are mutually exclusive. No Redux/React Query: state lives in `App.tsx` and component `useState`.
+Five panels share a flex row via CSS `order`: `category-pane` (1, CategoryInfo/TagInfo), `element-pane` (2, ElementDetails), `chart-container` (3, chart + view toggle), `search-panel` (4, SearchPane), `info-panel` (5, InfoPane/CategoriesPane). The view toggle sits absolutely inside `.chart-container`, not inside any chart component. On desktop (>1024px) each side pane has a `PaneResizer` drag handle rendered as a flex sibling sharing the pane's `order` (after left panes, before right panes, since panes are scroll containers); widths live in `paneWidths` state (persisted to `localStorage` key `mog-pane-widths`) and apply via the `--pane-width` CSS variable. Double-click/Enter resets. Header buttons (Dark, Help, Categories, Search) are mutually exclusive. No Redux/React Query: state lives in `App.tsx` and component `useState`.
 
 ### Dark mode
 
@@ -148,7 +148,7 @@ Header buttons are hidden and replaced by a fixed bottom nav (Help, Categories, 
 
 ### Tab bar and charts
 
-- `ElementDetails.tsx` tab bar uses `ResizeObserver` + `scrollWidth > clientWidth` for overflow; active indicator is `box-shadow: inset 0 -2px 0` (no layout shift); height `2.5rem`; Budget and Staff tabs are hidden for `category === 'official'`.
+- `ElementDetails.tsx` tab bar is sticky at the top of the scrolling pane (bleeds into side padding via `--pane-pad-x`); tabs are equal-width (`flex: 1 1 0`) with the count stacked under the label so they never overflow; arrow/Home/End keys switch tabs (roving `tabIndex`); `selectTab` scrolls back to the tab content top if the bar is pinned. Active indicator is `box-shadow: inset 0 -2px 0` (no layout shift); height `3rem`; Budget and Staff tabs are hidden for `category === 'official'` (`currentTab` falls back to Info).
 - `BudgetTab`/`StaffTab` pies use Recharts `<Pie data={activePieData}>` with swapped data (no remount) for transitions. Click handler: `onClick={(data: any) => data?.elementId && onSelectElement?.(data.elementId)}` — `PieSectorDataItem` doesn't match the real payload, so keep `any`. Staff pie collapses entries under 2% into a grey "Other" slice; the legend still lists them.
 
 ### Style
@@ -175,7 +175,7 @@ Use these for data work rather than ad-hoc edits:
 - **Staff pie missing for a sub-org:** check `effectiveView` in `StaffTab.tsx` falls back to `'grade'` when `orgs.length === 0`.
 - **Staff row not clickable:** `orgId` must match an element ID.
 - **Budget pie slice not navigating:** body label must be in `BODY_LABEL_TO_ELEMENT`; re-run the extract script.
-- **Tab bar scroll indicator wrong:** `checkTabs()` must also run in the `useEffect` that depends on `elementId`.
+- **Sticky tab bar shows content at its sides:** the scroll container must set `--pane-pad-x` to match its horizontal padding (`.details-panel`, `.bottom-sheet-content`).
 
 ---
 
