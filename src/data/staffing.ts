@@ -781,20 +781,16 @@ export const staffProfiles: Record<string, StaffProfile[]> = {
     },
   ],
 
-  'nats': [
+  'tna': [
     {
-      // Note: the 'nats' element ID is used in elements.ts for "The National
-      // Archives" (its tags/description reflect an older air-traffic-control
-      // identity; see element record). Mapped here to The National Archives
-      // CSV row to match the element's current name.
-      elementId: 'nats',
+      elementId: 'tna',
       year: '2024-25',
       grades: { scs: 10, g67: 110, sheo: 320, eo: 100, aaao: 105, other: 0, total: 645 },
       orgs: [],
       professions: { 'Operational Delivery': 145, 'Knowledge and Information Management': 115, 'Digital and Data': 95, 'Commercial': 20, 'Communications': 20, 'Human Resources': 20, 'Finance': 15, 'Project Delivery': 15, 'Property': 10, 'Security': 10, 'Other': 175 },
     },
     {
-      elementId: 'nats',
+      elementId: 'tna',
       year: '2025-26',
       grades: { scs: 5, g67: 125, sheo: 345, eo: 90, aaao: 95, other: 0, total: 665 },
       orgs: [],
@@ -920,16 +916,6 @@ export const staffProfiles: Record<string, StaffProfile[]> = {
       grades: { scs: 20, g67: 210, sheo: 110, eo: 25, aaao: 10, other: 0, total: 380 },
       orgs: [],
       professions: { 'Commercial': 0, 'Communications': 20, 'Digital and Data': 5, 'Economics': 5, 'Finance': 10, 'Human Resources': 10, 'Legal': 0, 'Operational Delivery': 135, 'Policy': 85, 'Project Delivery': 0, 'Property': 30, 'Science and Engineering': 25, 'Statistics': 20, 'Other': 0 },
-    },
-  ],
-
-  'tna': [
-    {
-      elementId: 'tna',
-      year: '2025-26',
-      grades: { scs: 5, g67: 125, sheo: 345, eo: 90, aaao: 95, other: 0, total: 665 },
-      orgs: [],
-      professions: { 'Commercial': 15, 'Communications': 10, 'Digital and Data': 140, 'Finance': 15, 'Human Resources': 25, 'Knowledge and Information Management': 200, 'Operational Delivery': 135, 'Policy': 5, 'Property': 15, 'Other': 100 },
     },
   ],
 

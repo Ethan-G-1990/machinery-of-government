@@ -13,7 +13,7 @@ This project is source available. Non-commercial use is permitted provided clear
 This application incorporates public sector data used under the Open Government Licence v3.0:
 
 - **HM Treasury OSCAR** — 2024–25 Final Outturn budget data. © Crown Copyright.
-- **Cabinet Office Civil Service Statistics 2025** — Headcount as at 31 March 2025. © Crown Copyright.
+- **Cabinet Office Civil Service Statistics 2026** (with 2025 for historic comparison) — Headcount as at 31 March 2026 and 31 March 2025. © Crown Copyright.
 
 Contains public sector information licensed under the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
 
@@ -81,9 +81,11 @@ Each element's detail pane has up to four tabs:
 - Budget data available for 37 department groups
 
 **Staff**
-- Civil Service headcount as at 31 March 2025
+- Civil Service headcount as at 31 March 2026, with 2025 data retained for comparison
+- Year selector with change from the previous year
 - Grade breakdown (SCS, Grade 6/7, SEO/HEO, EO, AA/AO)
-- For departments, a toggle switches between grade view and by-organisation view
+- Profession breakdown, where reported
+- For departments, a toggle switches between grade view, by-organisation view and profession view, and between the whole group and the core department
 - Clicking a sub-organisation row navigates to that element
 
 ### Classification System
@@ -141,7 +143,7 @@ Filtering by a territory shows all elements whose remit covers it — e.g. filte
 
 `src/data/budgets-oscar.json` — 2024–25 outturn budget data for 37 department groups, pre-processed from HM Treasury OSCAR data.
 
-`src/data/staffing.ts` — Civil Service headcount as at 31 March 2025 for all ministerial departments and major non-ministerial departments, with per-grade breakdowns and sub-organisation detail.
+`src/data/staffing.ts` — Civil Service headcount (31 March 2025 and 2026) for ministerial departments, major non-ministerial departments and their agencies, with grade and profession breakdowns and sub-organisation detail.
 
 ---
 
@@ -151,119 +153,6 @@ Filtering by a territory shows all elements whose remit covers it — e.g. filte
 - **Cytoscape.js** — network graph (both focus and full views)
 - **Recharts** — budget and staff donut charts
 - **CSS3** — component-scoped styling with CSS custom property-based dark mode
-
----
-
-## Getting Started
-
-### Prerequisites
-
-Node.js 18+ and npm.
-
-### Development
-
-```bash
-npm install
-npm run dev        # http://localhost:5173
-```
-
-### Production build
-
-```bash
-npm run build      # outputs to dist/
-npm run preview    # preview the production build locally
-```
-
----
-
-## Project Structure
-
-```
-src/
-├── components/
-│   ├── OrgChart.tsx / .css         # Focus view — Cytoscape radial layout
-│   ├── FullView.tsx / .css         # Full view — all elements, concentric ring layout
-│   ├── ElementDetails.tsx / .css   # Element detail pane (Info / Powers / Budget / Staff)
-│   ├── BudgetTab.tsx / .css        # Budget tab
-│   ├── StaffTab.tsx / .css         # Staff tab
-│   ├── InfoPane.tsx / .css         # Help / about pane
-│   ├── CategoryInfo.tsx / .css     # Category info & element list
-│   ├── CategoriesPane.tsx / .css   # Browse all categories
-│   ├── TagInfo.tsx / .css          # Tag info & element list
-│   └── SearchPane.tsx / .css       # Search and filter pane
-├── data/
-│   ├── elements.ts                 # All government element data and tag definitions
-│   ├── jurisdictions.ts            # Jurisdiction type, hierarchy, and filter logic
-│   ├── powers.ts                   # Powers, duties, and legislation data
-│   ├── budgets.ts                  # Budget types and OSCAR JSON import
-│   ├── budgets-oscar.json          # Pre-processed 2024–25 outturn data
-│   └── staffing.ts                 # Civil Service headcount data (2025)
-├── utils/
-│   └── colors.ts                   # Element colour scheme
-├── App.tsx                         # Main app, state management, dark mode, view mode
-├── App.css                         # Layout, panel ordering, responsive breakpoints, dark mode tokens
-└── main.tsx                        # React entry point
-
-scripts/
-└── extract-oscar.mjs               # OSCAR xlsx → budgets-oscar.json
-```
-
----
-
-## Data Structures
-
-### GovElement (`src/data/elements.ts`)
-
-```typescript
-{
-  id: string                   // unique identifier (kebab-case)
-  name: string                 // display name
-  category: 'official' | 'department' | 'body' | 'group'
-  subtype: string              // see classification system above
-  description: string
-  role?: string                // role title (officials only)
-  currentHolder?: string       // person currently in the role
-  infoUrl?: string             // link to GOV.UK page
-  parentIds: string[]          // elements this reports to / is part of
-  secondaryParentIds?: string[] // additional oversight relationships (e.g. junior minister → dept)
-  tags?: string[]              // tag IDs from tagDefinitions
-  jurisdictions?: Jurisdiction[] // geographic scope; omitted = UK-wide by default
-}
-```
-
-Reverse lookups are computed at module load time:
-- `getChildIds(id)` — elements that list `id` in their `parentIds`
-- `getSecondaryChildIds(id)` — elements that list `id` in their `secondaryParentIds`
-- `getConnectedElements(id)` — returns `{ parents, children, secondaryParents, secondaryChildren }`
-
-### PowerProfile (`src/data/powers.ts`)
-
-```typescript
-{
-  elementId: string
-  lastReviewed?: string
-  powers: Array<{
-    id: string
-    title: string
-    description: string
-    powerType: 'power' | 'duty' | 'function' | 'responsibility'
-    inForceFrom?: string
-    sources: Array<{
-      type: 'act' | 'statutory-instrument' | 'prerogative' | 'case-law' | 'convention'
-      title: string
-      section?: string
-      year?: number
-      legislationUrl?: string
-      caseRef?: string
-    }>
-    notes?: string
-  }>
-}
-```
-
-### BudgetProfile and StaffProfile
-
-See the existing `budgets.ts` and `staffing.ts` type definitions. Use `getStaffProfile(elementId)` — it searches both top-level profiles and sub-organisation arrays so agencies can be looked up without duplicating data.
 
 ---
 
@@ -289,25 +178,6 @@ See the existing `budgets.ts` and `staffing.ts` type definitions. Use `getStaffP
 | Preview element (mobile) | Tap a node — name and type appear in chip at bottom |
 | Select element (mobile) | Tap **Select** in the chip to update the chart |
 | View element details (mobile) | Tap **Details →** in the chip, or tap Details in the nav bar |
-
----
-
-## Refreshing Budget Data
-
-```bash
-# 1. Place new BUD_xx-xx.xlsx in project root
-# 2. Update filename in scripts/extract-oscar.mjs
-# 3. Run:
-node scripts/extract-oscar.mjs
-```
-
-Update `BODY_LABEL_TO_ELEMENT` in the script if any body names have changed or new elements have been added.
-
----
-
-## Adding Powers Data
-
-Add an entry to `src/data/powers.ts` keyed by the element's ID from `elements.ts`. Use `legislationUrl` pointing to legislation.gov.uk for sources where possible.
 
 ---
 
