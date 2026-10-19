@@ -288,14 +288,6 @@
   color: var(--dm-text-muted);
 }
 
-/* Info link button */
-.app-dark .info-link {
-  background: linear-gradient(135deg, #1c4f7a, #155a8a);
-  color: #fff;
-}
-.app-dark .info-link:hover {
-  background: linear-gradient(135deg, #155a8a, #0e4470);
-}
 
 /* Power cards */
 .app-dark .power-card {

@@ -14,6 +14,7 @@ This application incorporates public sector data used under the Open Government 
 
 - **HM Treasury OSCAR** — 2024–25 Final Outturn budget data. © Crown Copyright.
 - **Cabinet Office Civil Service Statistics 2026** (with 2025 for historic comparison) — Headcount as at 31 March 2026 and 31 March 2025. © Crown Copyright.
+- **Senior organogram data** — Senior Civil Service post and reporting-line data from the National Data Library / data.gov.uk (Cabinet Office, as at 31 March 2026). © Crown Copyright.
 
 Contains public sector information licensed under the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
 
@@ -44,7 +45,7 @@ Toggle between light and dark appearances via the ☾/☀ button in the chart to
 
 ### Navigation & Visualization
 - **Interactive network graph** — click any node to select it; connections arranged radially in focus view
-- **Element pane** — detailed sidebar with tabbed sections for Info, Powers, Budget, and Staff
+- **Element pane** — detailed sidebar with tabbed sections for Info, Powers, Budget, Staff, and Org
 - **Random element** — ⚄ button (top-right of chart) jumps to a randomly selected element from the entire database
 - **Legend** — ☰ Legend button toggles the key on desktop; shown by default, hidden on mobile. Groups section only shown in focus view
 - **Jurisdiction filter** — 🌍 Territory button filters the chart by geographic scope (UK, England, Wales, Scotland, Northern Ireland, Crown Dependencies, Overseas Territories); selecting a territory shows all elements whose remit covers it, including broader jurisdictions; reset with ↺
@@ -57,7 +58,7 @@ Toggle between light and dark appearances via the ☾/☀ button in the chart to
 
 ### Element Detail Tabs
 
-Each element's detail pane has up to four tabs:
+Each element's detail pane has up to five tabs:
 
 **Info**
 - Description, role title, current role holder
@@ -87,6 +88,12 @@ Each element's detail pane has up to four tabs:
 - Profession breakdown, where reported
 - For departments, a toggle switches between grade view, by-organisation view and profession view, and between the whole group and the core department
 - Clicking a sub-organisation row navigates to that element
+
+**Org**
+- Senior leadership structure as a collapsible hierarchy of Senior Civil Service posts
+- Each post shows name (where published), grade (SCS4–SCS1), job title (where published), and organisational unit
+- Defaults to showing the most senior two tiers; nodes expand on click to reveal direct reports
+- Shows the reference date the data was reported and a link to the source on the National Data Library
 
 ### Classification System
 
@@ -144,6 +151,8 @@ Filtering by a territory shows all elements whose remit covers it — e.g. filte
 `src/data/budgets-oscar.json` — 2024–25 outturn budget data for 37 department groups, pre-processed from HM Treasury OSCAR data.
 
 `src/data/staffing.ts` — Civil Service headcount (31 March 2025 and 2026) for ministerial departments, major non-ministerial departments and their agencies, with grade and profession breakdowns and sub-organisation detail.
+
+`src/data/organograms.ts` — Senior Civil Service post and reporting-line data sourced from the National Data Library organogram CSVs. Currently covers the Cabinet Office (423 posts, as at 31 March 2026).
 
 ---
 

@@ -232,24 +232,6 @@
   gap: 0.4rem;
 }
 
-.budget-report-link {
-  align-self: flex-start;
-  background: linear-gradient(135deg, #27ae60, #1e8449);
-  color: white;
-  padding: 0.75rem 1.2rem;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
-  display: inline-block;
-}
-
-.budget-report-link:hover {
-  background: linear-gradient(135deg, #1e8449, #196f3d);
-  transform: translateX(2px);
-}
-
 .budget-source {
   font-size: 0.75rem;
   color: #aab7b8;

@@ -42,7 +42,7 @@ export default function InfoPane({ onClose }: InfoPaneProps) {
         <h3>How to navigate</h3>
         <dl className="info-controls">
           <dt>Select an element</dt>
-          <dd>Click any node on the chart. On desktop, the element pane opens with details, relationships, and tabs for Powers, Budget, and Staff. On mobile, the element's name and type appear in a bar at the bottom — tap <strong>Select</strong> to update the chart, then <strong>Details →</strong> to open the full pane.</dd>
+          <dd>Click any node on the chart. On desktop, the element pane opens with details, relationships, and tabs for Powers, Budget, Staff, and Org. On mobile, the element's name and type appear in a bar at the bottom — tap <strong>Select</strong> to update the chart, then <strong>Details →</strong> to open the full pane.</dd>
 
           <dt>Random element</dt>
           <dd>Click the <strong>⚄</strong> button (top-right of the chart) to jump to a randomly selected element from the entire database.</dd>
@@ -94,7 +94,10 @@ export default function InfoPane({ onClose }: InfoPaneProps) {
           <dd>2024–25 final outturn spending from HM Treasury OSCAR data — net and gross expenditure, income, DEL/AME split, and a breakdown by economic type, programme, or arm's-length body (where available). Links to the body's annual report collection on GOV.UK.</dd>
 
           <dt>Staff</dt>
-          <dd>Civil Service headcount as at 31 March 2025 from the Cabinet Office Civil Service Statistics. Shows a grade breakdown (SCS, Grade 6/7, SEO/HEO, EO, AA/AO) and, for departments, a breakdown by sub-organisation. Clicking a sub-organisation row navigates to that element.</dd>
+          <dd>Civil Service headcount as at 31 March 2026 from the Cabinet Office Civil Service Statistics. Shows a grade breakdown (SCS, Grade 6/7, SEO/HEO, EO, AA/AO) and, for departments, a breakdown by sub-organisation. Clicking a sub-organisation row navigates to that element.</dd>
+
+          <dt>Org</dt>
+          <dd>Senior leadership structure as a collapsible hierarchy, sourced from the organogram CSVs published on the National Data Library / data.gov.uk. Shows the name, grade (SCS4–SCS1), job title, and unit of each Senior Civil Service post and who they report to. Names and titles withheld under FOIA exemptions appear as "Redacted". The reference date and a link to the source data are shown at the bottom. Currently available for the Cabinet Office; coverage will grow as more organograms are ingested.</dd>
         </dl>
       </section>
 
@@ -166,10 +169,11 @@ export default function InfoPane({ onClose }: InfoPaneProps) {
           <li>Government professions and cross-cutting Cabinet Office functions</li>
           <li>Powers and legislation data for all Cabinet ministers and selected independent officials</li>
           <li>Budget data for 37 department groups (2024–25 outturn)</li>
-          <li>Staff headcount for all ministerial and non-ministerial departments and their agencies (31 March 2025)</li>
+          <li>Staff headcount for all ministerial and non-ministerial departments and their agencies (31 March 2026, with 2025 for comparison)</li>
+          <li>Senior organogram (SCS post hierarchy) for the Cabinet Office (31 March 2026)</li>
         </ul>
         <p className="info-note">
-          Data reflects the UK government structure as of early 2025. Role holders and
+          Data reflects the UK government structure as at mid-2026. Role holders and
           organisational structures change frequently; always verify against{' '}
           <a href="https://www.gov.uk/government/organisations" target="_blank" rel="noopener noreferrer">GOV.UK</a>{' '}
           for the most current position.
@@ -200,7 +204,7 @@ export default function InfoPane({ onClose }: InfoPaneProps) {
           <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" target="_blank" rel="noopener noreferrer">
             Open Government Licence v3.0
           </a>
-          , including HM Treasury OSCAR data and Cabinet Office Civil Service Statistics.
+          , including HM Treasury OSCAR data, Cabinet Office Civil Service Statistics, and senior organogram data from the National Data Library.
         </p>
       </footer>
     </div>

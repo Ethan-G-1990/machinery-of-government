@@ -1,0 +1,245 @@
+/* ── Org tab ──────────────────────────────────────────────────────────────── */
+.org-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Controls (expand/collapse all) ──────────────────────────────────────── */
+.org-controls {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.org-control-btn {
+  background: none;
+  border: 1px solid #d5dbde;
+  border-radius: 4px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.78rem;
+  color: #7f8c8d;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.org-control-btn:hover {
+  border-color: #2980b9;
+  color: #2980b9;
+}
+
+/* ── Tree ─────────────────────────────────────────────────────────────────── */
+.org-tree,
+.org-children {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.org-children {
+  padding-left: 1.4rem;
+  border-left: 1.5px solid #e8ecee;
+  margin-left: 0.6rem;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.org-node {
+  margin: 0;
+}
+
+/* ── Individual post row ──────────────────────────────────────────────────── */
+.org-post {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.35rem 0.25rem 0.35rem 0;
+  border-radius: 4px;
+  transition: background 0.12s;
+  min-height: 2rem;
+}
+
+.org-post-expandable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.org-post-expandable:hover {
+  background: #f4f6f7;
+}
+
+.org-post:focus-visible {
+  outline: 2px solid #2980b9;
+  outline-offset: 1px;
+}
+
+/* ── Left cluster: toggle arrow + grade badge ─────────────────────────────── */
+.org-post-left {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
+  padding-top: 0.1rem;
+}
+
+.org-toggle {
+  font-size: 0.75rem;
+  color: #95a5a6;
+  display: inline-block;
+  width: 0.75rem;
+  text-align: center;
+  transition: transform 0.15s;
+  line-height: 1;
+}
+
+.org-toggle-collapsed {
+  transform: rotate(-90deg);
+}
+
+.org-toggle-spacer {
+  display: inline-block;
+  width: 0.75rem;
+}
+
+.org-grade-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--grade-colour) 12%, #fff);
+  color: var(--grade-colour);
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+/* ── Body: name, title, unit ──────────────────────────────────────────────── */
+.org-post-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.org-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #2c3e50;
+  line-height: 1.3;
+}
+
+.org-name-redacted {
+  color: #bdc3c7;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.org-title {
+  font-size: 0.78rem;
+  color: #555;
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.org-unit {
+  font-size: 0.72rem;
+  color: #95a5a6;
+  font-style: italic;
+}
+
+/* ── Child count badge ────────────────────────────────────────────────────── */
+.org-child-count {
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  font-weight: 600;
+  background: #ecf0f1;
+  color: #95a5a6;
+  padding: 0.1rem 0.4rem;
+  border-radius: 10px;
+  line-height: 1.4;
+  margin-top: 0.15rem;
+}
+
+/* ── Footer ───────────────────────────────────────────────────────────────── */
+.org-footer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #ecf0f1;
+  gap: 0.4rem;
+}
+
+.org-footer-date {
+  font-size: 0.75rem;
+  color: #bdc3c7;
+}
+
+/* ── Dark mode ────────────────────────────────────────────────────────────── */
+.app-dark .org-post-expandable:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.app-dark .org-children {
+  border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+.app-dark .org-name {
+  color: #e8eaed;
+}
+
+.app-dark .org-name-redacted {
+  color: #555;
+}
+
+.app-dark .org-title {
+  color: #9aa0a6;
+}
+
+.app-dark .org-unit {
+  color: #5f6368;
+}
+
+.app-dark .org-grade-badge {
+  background: color-mix(in srgb, var(--grade-colour) 20%, #1e1e1e);
+}
+
+.app-dark .org-child-count {
+  background: rgba(255, 255, 255, 0.08);
+  color: #5f6368;
+}
+
+.app-dark .org-control-btn {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #5f6368;
+}
+
+.app-dark .org-control-btn:hover {
+  border-color: #2980b9;
+  color: #2980b9;
+}
+
+.app-dark .org-footer {
+  border-top-color: rgba(255, 255, 255, 0.08);
+}
+
+.app-dark .org-footer-date {
+  color: #5f6368;
+}
+
+/* ── Mobile ───────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) and (pointer: coarse) {
+  .org-post {
+    padding: 0.5rem 0.25rem 0.5rem 0;
+    min-height: 2.5rem;
+  }
+
+  .org-name {
+    font-size: 0.9rem;
+  }
+
+  .org-children {
+    padding-left: 1.1rem;
+  }
+}

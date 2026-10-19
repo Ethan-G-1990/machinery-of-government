@@ -331,9 +331,9 @@ export default function BudgetTab({ budgetProfile, onSelectElement }: BudgetTabP
             href={budget.annualReportUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="info-link budget-report-link"
+            className="external-link"
           >
-            Full annual report →
+            Full annual report ↗
           </a>
         )}
         <p className="budget-source">Source: {budget.sourceLabel}</p>

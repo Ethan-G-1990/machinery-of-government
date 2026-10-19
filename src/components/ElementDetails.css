@@ -174,20 +174,22 @@
   text-transform: none;
 }
 
-.info-link {
+/* Shared external-link button used by the Info, Budget, Staff and Org tabs */
+.external-link {
   display: inline-block;
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  align-self: flex-start;
+  background: linear-gradient(135deg, #2980b9, #1a5276);
   color: white;
   padding: 0.75rem 1.2rem;
   border-radius: 4px;
   text-decoration: none;
   font-weight: 500;
-  transition: all 0.2s ease;
   font-size: 0.95rem;
+  transition: all 0.2s ease;
 }
 
-.info-link:hover {
-  background: linear-gradient(135deg, #2980b9, #1f618d);
+.external-link:hover {
+  background: linear-gradient(135deg, #1a5276, #154360);
   transform: translateX(2px);
 }
 

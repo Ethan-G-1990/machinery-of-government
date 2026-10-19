@@ -186,24 +186,6 @@
   gap: 0.4rem;
 }
 
-.staff-source-link {
-  align-self: flex-start;
-  background: linear-gradient(135deg, #2980b9, #1a5276);
-  color: white;
-  padding: 0.75rem 1.2rem;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
-  display: inline-block;
-}
-
-.staff-source-link:hover {
-  background: linear-gradient(135deg, #1a5276, #154360);
-  transform: translateX(2px);
-}
-
 .staff-notes {
   font-size: 0.75rem;
   color: #aab7b8;

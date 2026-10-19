@@ -6,11 +6,13 @@ import { powerProfiles } from '../data/powers'
 import { budgetProfiles } from '../data/budgets'
 import { getStaffProfileSeries } from '../data/staffing'
 import { professionProfiles } from '../data/professions'
+import { organogramProfiles } from '../data/organograms'
 import BudgetTab from './BudgetTab'
 import StaffTab from './StaffTab'
+import OrgTab from './OrgTab'
 import './ElementDetails.css'
 
-type Tab = 'info' | 'powers' | 'budget' | 'staff'
+type Tab = 'info' | 'powers' | 'budget' | 'staff' | 'org'
 
 interface ElementDetailsProps {
   elementId: string
@@ -48,6 +50,7 @@ export default function ElementDetails({ elementId, onSelectElement, onClose, on
   const staffHistory = getStaffProfileSeries(elementId)
   const staffProfile = staffHistory[staffHistory.length - 1]
   const professionProfile = professionProfiles[elementId]
+  const orgProfile = organogramProfiles[elementId]
 
   if (!element) {
     return <div className="element-details">Element not found</div>
@@ -234,8 +237,8 @@ export default function ElementDetails({ elementId, onSelectElement, onClose, on
       {element.infoUrl && (
         <div className="detail-section">
           <h3>Further Information</h3>
-          <a href={element.infoUrl} target="_blank" rel="noopener noreferrer" className="info-link">
-            View more details →
+          <a href={element.infoUrl} target="_blank" rel="noopener noreferrer" className="external-link">
+            View more details ↗
           </a>
         </div>
       )}
@@ -484,6 +487,7 @@ export default function ElementDetails({ elementId, onSelectElement, onClose, on
     ...(element.category !== 'official' ? [
       { id: 'budget' as Tab, label: 'Budget', count: budgetProfile?.budgets[0]?.financialYear, empty: !budgetProfile },
       { id: 'staff' as Tab, label: 'Staff', count: staffProfile?.grades.total.toLocaleString(), empty: !staffProfile },
+      { id: 'org' as Tab, label: 'Org', count: orgProfile ? String(orgProfile.posts.length) : undefined, empty: !orgProfile },
     ] : []),
   ]
   // Budget/Staff aren't offered for officials — fall back to Info if one was open
@@ -554,6 +558,10 @@ export default function ElementDetails({ elementId, onSelectElement, onClose, on
         {/* key resets the tab's year / scope / chart state when the selected
             element changes, so a new organisation always opens on its latest year */}
         {currentTab === 'staff' && <StaffTab key={elementId} staffHistory={staffHistory} onSelectElement={onSelectElement} />}
+        {currentTab === 'org' && (orgProfile
+          ? <OrgTab key={elementId} orgProfile={orgProfile} />
+          : <div className="tab-empty"><p>No organogram data is available for this organisation yet.</p></div>
+        )}
       </div>
     </div>
   )

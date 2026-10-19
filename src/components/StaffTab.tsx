@@ -442,7 +442,7 @@ export default function StaffTab({ staffHistory, onSelectElement }: StaffTabProp
       {/* Footer */}
       <div className="staff-footer">
         <a
-          className="staff-source-link"
+          className="external-link"
           href={`https://www.gov.uk/government/statistics/civil-service-statistics-${releaseYear}`}
           target="_blank"
           rel="noopener noreferrer"
