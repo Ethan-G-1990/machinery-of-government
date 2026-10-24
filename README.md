@@ -152,7 +152,7 @@ Filtering by a territory shows all elements whose remit covers it — e.g. filte
 
 `src/data/staffing.ts` — Civil Service headcount (31 March 2025 and 2026) for ministerial departments, major non-ministerial departments and their agencies, with grade and profession breakdowns and sub-organisation detail.
 
-`src/data/organograms.ts` — Senior Civil Service post and reporting-line data sourced from the National Data Library organogram CSVs. The Cabinet Office entry is the full senior snapshot (423 posts, as at 31 March 2026). Eighteen further departments have SCS3 and SCS2 posts from `organogram-posts-export.json`. That export has no FTE, so those posts are recorded as 1.
+`src/data/organograms.ts` — Senior Civil Service post and reporting-line data sourced from the National Data Library organogram CSVs. The Cabinet Office entry is the full senior snapshot (423 posts, as at 31 March 2026). Eighteen further departments include SCS1, SCS2, SCS3, and SCS4 posts where the published senior file contains them, with FTE taken from that file.
 
 ---
 

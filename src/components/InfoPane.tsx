@@ -97,7 +97,7 @@ export default function InfoPane({ onClose }: InfoPaneProps) {
           <dd>Civil Service headcount as at 31 March 2026 from the Cabinet Office Civil Service Statistics. Shows a grade breakdown (SCS, Grade 6/7, SEO/HEO, EO, AA/AO) and, for departments, a breakdown by sub-organisation. Clicking a sub-organisation row navigates to that element.</dd>
 
           <dt>Org</dt>
-          <dd>Senior leadership structure as a collapsible hierarchy, sourced from the organogram CSVs published on the National Data Library / data.gov.uk. Shows the name, grade (SCS4–SCS1), job title, and unit of each Senior Civil Service post and who they report to. Names and titles withheld under FOIA exemptions appear as "Redacted". The reference date and a link to the source data are shown at the bottom. The Cabinet Office shows its full senior snapshot. Eighteen further departments show their SCS3 and SCS2 posts; lines below SCS3 start collapsed.</dd>
+          <dd>Senior leadership structure as a collapsible hierarchy, sourced from the organogram CSVs published on the National Data Library / data.gov.uk. Shows the name, grade (SCS4–SCS1), job title, and unit of each Senior Civil Service post and who they report to. Names and titles withheld under FOIA exemptions appear as "Redacted". The reference date and a link to the source data are shown at the bottom. The Cabinet Office and eighteen further departments show the senior posts in their published organograms, from SCS4 to SCS1 where those grades are included. Lines below SCS3 start collapsed.</dd>
         </dl>
       </section>
 
@@ -170,7 +170,7 @@ export default function InfoPane({ onClose }: InfoPaneProps) {
           <li>Powers and legislation data for all Cabinet ministers and selected independent officials</li>
           <li>Budget data for 37 department groups (2024–25 outturn)</li>
           <li>Staff headcount for all ministerial and non-ministerial departments and their agencies (31 March 2026, with 2025 for comparison)</li>
-          <li>Senior organogram for the Cabinet Office (31 March 2026) and SCS3/SCS2 posts for 18 further departments</li>
+          <li>Senior organogram for the Cabinet Office (31 March 2026) and SCS posts for 18 further departments</li>
         </ul>
         <p className="info-note">
           Data reflects the UK government structure as at mid-2026. Role holders and
