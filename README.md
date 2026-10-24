@@ -14,7 +14,7 @@ This application incorporates public sector data used under the Open Government 
 
 - **HM Treasury OSCAR** — 2024–25 Final Outturn budget data. © Crown Copyright.
 - **Cabinet Office Civil Service Statistics 2026** (with 2025 for historic comparison) — Headcount as at 31 March 2026 and 31 March 2025. © Crown Copyright.
-- **Senior organogram data** — Senior Civil Service post and reporting-line data from the National Data Library / data.gov.uk (Cabinet Office, as at 31 March 2026). © Crown Copyright.
+- **Senior organogram data** — Senior Civil Service post and reporting-line data from the National Data Library / data.gov.uk. The Cabinet Office snapshot is as at 31 March 2026. Eighteen further departments use their latest published senior file. © Crown Copyright.
 
 Contains public sector information licensed under the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/).
 
@@ -152,7 +152,7 @@ Filtering by a territory shows all elements whose remit covers it — e.g. filte
 
 `src/data/staffing.ts` — Civil Service headcount (31 March 2025 and 2026) for ministerial departments, major non-ministerial departments and their agencies, with grade and profession breakdowns and sub-organisation detail.
 
-`src/data/organograms.ts` — Senior Civil Service post and reporting-line data sourced from the National Data Library organogram CSVs. Currently covers the Cabinet Office (423 posts, as at 31 March 2026).
+`src/data/organograms.ts` — Senior Civil Service post and reporting-line data sourced from the National Data Library organogram CSVs. The Cabinet Office entry is the full senior snapshot (423 posts, as at 31 March 2026). Eighteen further departments have SCS3 and SCS2 posts from `organogram-posts-export.json`. That export has no FTE, so those posts are recorded as 1.
 
 ---
 

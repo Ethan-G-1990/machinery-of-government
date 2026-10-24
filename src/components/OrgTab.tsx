@@ -219,6 +219,9 @@ export default function OrgTab({ orgProfile }: OrgTabProps) {
       </ul>
 
       <div className="org-footer">
+        {orgProfile.limitationFlag && (
+          <p className="org-limitation">{orgProfile.limitationFlag}</p>
+        )}
         <a
           href={orgProfile.sourceUrl}
           target="_blank"
