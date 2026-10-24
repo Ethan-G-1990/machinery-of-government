@@ -1,0 +1,428 @@
+.hierarchy-view {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  background: #fff;
+  padding-top: 4.6rem;
+  box-sizing: border-box;
+}
+
+.hierarchy-toolbar {
+  flex-shrink: 0;
+  max-height: 42%;
+  overflow: auto;
+  padding: 0.35rem 1rem 0.65rem;
+  border-bottom: 1px solid #e6ebef;
+}
+
+.hierarchy-dept {
+  margin: 0 0 0.45rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #003366;
+}
+
+.hierarchy-kicker,
+.hierarchy-non-ministerial {
+  margin: 0 0 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #003366;
+}
+
+.hierarchy-non-ministerial {
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 0.78rem;
+  color: #5f6b76;
+}
+
+.hierarchy-political {
+  margin-bottom: 0.65rem;
+}
+
+.hierarchy-ministers {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+}
+
+.hierarchy-minister {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  min-width: 10rem;
+  max-width: 18rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid #d6e0ea;
+  border-radius: 6px;
+  background: #f4f7fb;
+}
+
+.hierarchy-minister-secretary {
+  border-color: #c5a3a0;
+  background: #fdf6f5;
+}
+
+.hierarchy-minister-office {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1a365d;
+  line-height: 1.3;
+}
+
+.hierarchy-minister-holder {
+  font-size: 0.75rem;
+  color: #52606d;
+}
+
+.hierarchy-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hierarchy-control-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.hierarchy-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0.75rem 1rem 1.25rem;
+}
+
+.hierarchy-empty {
+  max-width: 36rem;
+  margin: 2.5rem auto;
+  text-align: center;
+  color: #52606d;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.hierarchy-empty-title {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #003366;
+}
+
+.hierarchy-filter-empty {
+  margin: 0.75rem 0 0 1.6rem;
+  color: #5f6b76;
+  font-size: 0.85rem;
+}
+
+.hierarchy-tree,
+.hierarchy-children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hierarchy-children {
+  margin-left: 0.7rem;
+  padding-left: 0.85rem;
+  border-left: 1.5px solid #e6ebef;
+}
+
+.hierarchy-node {
+  margin: 0;
+}
+
+.hierarchy-post {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding: 0.28rem 0.2rem;
+  border-radius: 4px;
+}
+
+.hierarchy-post-head {
+  padding-top: 0.15rem;
+  padding-bottom: 0.45rem;
+}
+
+.hierarchy-toggle,
+.hierarchy-scs1-group {
+  background: none;
+  border: 0;
+  padding: 0.15rem;
+  cursor: pointer;
+  color: #7f8c8d;
+  line-height: 1;
+}
+
+.hierarchy-toggle {
+  margin-top: 0.15rem;
+}
+
+.hierarchy-toggle:hover,
+.hierarchy-scs1-group:hover {
+  color: #2980b9;
+}
+
+.hierarchy-toggle:focus-visible,
+.hierarchy-scs1-group:focus-visible,
+.hierarchy-post-main:focus-visible {
+  outline: 2px solid #2980b9;
+  outline-offset: 1px;
+}
+
+.hierarchy-toggle-spacer {
+  width: 1.15rem;
+  flex-shrink: 0;
+}
+
+.hierarchy-chevron {
+  display: inline-block;
+  width: 0.8rem;
+  text-align: center;
+  transition: transform 0.15s;
+}
+
+.hierarchy-chevron-collapsed {
+  transform: rotate(-90deg);
+}
+
+.hierarchy-post-main {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+}
+
+.hierarchy-post-line {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.hierarchy-grade {
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.1rem 0.38rem;
+  border-radius: 3px;
+  color: var(--grade-colour);
+  background: color-mix(in srgb, var(--grade-colour) 12%, #fff);
+}
+
+.hierarchy-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2c3e50;
+  line-height: 1.3;
+}
+
+.hierarchy-title {
+  font-size: 0.78rem;
+  color: #555;
+  line-height: 1.35;
+}
+
+.hierarchy-unit {
+  font-size: 0.72rem;
+  font-style: italic;
+  color: #7f8c8d;
+}
+
+.hierarchy-redacted {
+  color: #a0a7ad;
+  font-style: italic;
+  font-weight: 500;
+}
+
+.hierarchy-count {
+  flex-shrink: 0;
+  margin-left: auto;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #7f8c8d;
+  background: #ecf0f1;
+  border-radius: 10px;
+  padding: 0.05rem 0.4rem;
+}
+
+.hierarchy-function {
+  display: none;
+  position: absolute;
+  z-index: 6;
+  top: calc(100% + 4px);
+  left: 0;
+  width: min(28rem, 70vw);
+  max-height: 9rem;
+  overflow: auto;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  font-size: 0.75rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #243038;
+}
+
+.hierarchy-post-main:hover > .hierarchy-function,
+.hierarchy-post-main:focus > .hierarchy-function,
+.hierarchy-post-main:focus-within > .hierarchy-function {
+  display: block;
+}
+
+.hierarchy-scs1-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.25rem 0.15rem;
+  border-radius: 4px;
+}
+
+.hierarchy-scs1-label {
+  font-size: 0.75rem;
+  color: #5f6b76;
+}
+
+.hierarchy-footer {
+  flex-shrink: 0;
+  border-top: 1px solid #e6ebef;
+  background: #fafafa;
+  padding: 0.5rem 1rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hierarchy-limitation,
+.hierarchy-source-line,
+.hierarchy-ogl {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #5f6b76;
+}
+
+.hierarchy-source-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.8rem;
+  align-items: baseline;
+}
+
+.hierarchy-source,
+.hierarchy-ogl a {
+  color: #1a5276;
+}
+
+.hierarchy-source:hover,
+.hierarchy-ogl a:hover {
+  color: #003366;
+}
+
+.app-dark .hierarchy-view {
+  background: #0d1117;
+  color: #e6edf3;
+}
+
+.app-dark .hierarchy-toolbar,
+.app-dark .hierarchy-footer {
+  border-color: #30363d;
+  background: #0d1117;
+}
+
+.app-dark .hierarchy-dept,
+.app-dark .hierarchy-kicker,
+.app-dark .hierarchy-empty-title {
+  color: #8ec1ff;
+}
+
+.app-dark .hierarchy-non-ministerial,
+.app-dark .hierarchy-minister-holder,
+.app-dark .hierarchy-title,
+.app-dark .hierarchy-empty,
+.app-dark .hierarchy-filter-empty,
+.app-dark .hierarchy-limitation,
+.app-dark .hierarchy-source-line,
+.app-dark .hierarchy-ogl,
+.app-dark .hierarchy-scs1-label {
+  color: #8b949e;
+}
+
+.app-dark .hierarchy-minister {
+  background: #161b22;
+  border-color: #30363d;
+}
+
+.app-dark .hierarchy-minister-secretary {
+  background: #1c1416;
+  border-color: #5c3330;
+}
+
+.app-dark .hierarchy-minister-office,
+.app-dark .hierarchy-name {
+  color: #e6edf3;
+}
+
+.app-dark .hierarchy-unit,
+.app-dark .hierarchy-redacted,
+.app-dark .hierarchy-toggle,
+.app-dark .hierarchy-scs1-group {
+  color: #8b949e;
+}
+
+.app-dark .hierarchy-children {
+  border-left-color: #30363d;
+}
+
+.app-dark .hierarchy-grade {
+  background: color-mix(in srgb, var(--grade-colour) 22%, #0d1117);
+}
+
+.app-dark .hierarchy-count {
+  background: #21262d;
+  color: #8b949e;
+}
+
+.app-dark .hierarchy-function {
+  background: #161b22;
+  border-color: #30363d;
+  color: #e6edf3;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.app-dark .hierarchy-source,
+.app-dark .hierarchy-ogl a {
+  color: #58a6ff;
+}
+
+@media (max-width: 768px) and (pointer: coarse) {
+  .hierarchy-view {
+    padding-top: 6.5rem;
+  }
+
+  .hierarchy-minister {
+    min-width: 0;
+    flex: 1 1 12rem;
+  }
+}

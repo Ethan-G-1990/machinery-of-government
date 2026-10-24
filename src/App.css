@@ -718,9 +718,24 @@
   position: absolute;
   top: 0.6rem;
   right: 4.9rem;
+  left: 0.6rem;
   z-index: 10;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 0.35rem;
+  pointer-events: none;
+}
+
+.chart-overlay-buttons > * {
+  pointer-events: auto;
+}
+
+.view-mode-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem;
 }
 
 .view-toggle-btn {

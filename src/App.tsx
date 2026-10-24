@@ -14,7 +14,17 @@ import type { Jurisdiction } from './data/jurisdictions'
 import { elementMatchesJurisdiction, jurisdictionInfo } from './data/jurisdictions'
 import JurisdictionFilter from './components/JurisdictionFilter'
 import PaneResizer from './components/PaneResizer'
+import HierarchyView from './components/HierarchyView'
 import './App.css'
+
+type CanvasView = 'focus' | 'radial' | 'gravity' | 'hierarchy'
+
+const CANVAS_VIEWS: { id: CanvasView; label: string; title: string }[] = [
+  { id: 'focus', label: '⊡ Focus', title: 'Focus view' },
+  { id: 'radial', label: '⊙ Radial', title: 'Radial view' },
+  { id: 'gravity', label: '⊝ Gravity', title: 'Gravity view (experimental)' },
+  { id: 'hierarchy', label: '▤ Hierarchy', title: 'Hierarchy view' },
+]
 
 type PaneKey = 'category' | 'element' | 'search' | 'info' | 'categories'
 const PANE_WIDTHS_STORAGE_KEY = 'mog-pane-widths'
@@ -80,7 +90,7 @@ function App() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [infoOpen, setInfoOpen] = useState(false)
   const [categoriesOpen, setCategoriesOpen] = useState(false)
-  const [viewMode, setViewMode] = useState<'focus' | 'radial' | 'gravity'>('radial')
+  const [viewMode, setViewMode] = useState<CanvasView>('radial')
   const [darkMode, setDarkMode] = useState(false)
   const [legendVisible, setLegendVisible] = useState(true)
   const [previewedElementId, setPreviewedElementId] = useState<string | null>(null)
@@ -324,6 +334,8 @@ function App() {
               jurisdictionIds={jurisdictionHighlightIds}
               isMobile={isMobile}
             />
+          ) : viewMode === 'hierarchy' ? (
+            <HierarchyView selectedElementId={selectedElementId} />
           ) : (
             <FullView
               onSelectElement={selectElement}
@@ -338,15 +350,21 @@ function App() {
             />
           )}
           <div className="chart-overlay-buttons">
-            <button
-              className={`view-toggle-btn${viewMode !== 'focus' ? ' view-toggle-btn-active' : ''}`}
-              onClick={() => setViewMode(m => m === 'focus' ? 'radial' : m === 'radial' ? 'gravity' : 'focus')}
-              title={viewMode === 'focus' ? 'Switch to radial view' : viewMode === 'radial' ? 'Switch to gravity view' : 'Switch to focus view'}
-              aria-label={viewMode === 'focus' ? 'Radial view' : viewMode === 'radial' ? 'Gravity view' : 'Focus view'}
-            >
-              {viewMode === 'focus' ? '⊡ Focus' : viewMode === 'radial' ? '⊙ Radial' : '⊝ Gravity (Experimental)'}
-            </button>
-            {!isMobile && (
+            <div className="view-mode-group" role="group" aria-label="Canvas view">
+              {CANVAS_VIEWS.map(mode => (
+                <button
+                  key={mode.id}
+                  type="button"
+                  className={`view-toggle-btn${viewMode === mode.id ? ' view-toggle-btn-active' : ''}`}
+                  aria-pressed={viewMode === mode.id}
+                  title={mode.title}
+                  onClick={() => setViewMode(mode.id)}
+                >
+                  {mode.label}
+                </button>
+              ))}
+            </div>
+            {viewMode !== 'hierarchy' && !isMobile && (
               <button
                 className={`view-toggle-btn${legendVisible ? ' view-toggle-btn-active' : ''}`}
                 onClick={() => setLegendVisible(v => !v)}
@@ -383,7 +401,7 @@ function App() {
               {darkMode ? '☀' : '☾'}
             </button>
           </div>
-          {!isMobile && legendVisible && (
+          {viewMode !== 'hierarchy' && !isMobile && legendVisible && (
             <div className="legend">
               <div className="legend-section legend-section-two-col">
                 <h4>Officials</h4>
