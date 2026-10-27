@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import type { OrgPost, OrgProfile } from '../data/organograms'
+import { applyOrganogramPins, type OrgPost, type OrgProfile } from '../data/organograms'
 import './OrgTab.css'
 
 interface OrgTabProps {
@@ -177,7 +177,7 @@ function OrgNode({ node, collapsed, onToggle, parentUnit }: NodeProps) {
 }
 
 export default function OrgTab({ orgProfile }: OrgTabProps) {
-  const tree = useMemo(() => buildTree(orgProfile.posts), [orgProfile.posts])
+  const tree = useMemo(() => buildTree(applyOrganogramPins(orgProfile).posts), [orgProfile])
   const [collapsed, setCollapsed] = useState<Set<string>>(() => getInitialCollapsed(tree))
 
   const toggle = (ref: string) => {

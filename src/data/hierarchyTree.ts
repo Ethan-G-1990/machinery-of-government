@@ -7,7 +7,7 @@
 
 import postsExport from '../../senior-organogram-posts.json'
 import { govElements, getConnectedElements, type GovElement } from './elements'
-import { organogramProfiles, type OrgPost } from './organograms'
+import { applyOrganogramPins, organogramProfiles, type OrgPost } from './organograms'
 
 const SHOWN_GRADES = new Set(['SCS1', 'SCS2', 'SCS3', 'SCS4'])
 
@@ -102,7 +102,8 @@ export function listHierarchyDepartments(): HierarchyDepartmentChoice[] {
   for (const id of Object.keys(organogramProfiles)) {
     const department = govElements[id]
     if (!department) continue
-    const profile = organogramProfiles[id]
+    const stored = organogramProfiles[id]
+    const profile = stored ? applyOrganogramPins(stored) : undefined
     const byRef = new Map<string, OrgPost>()
     for (const post of profile?.posts ?? []) {
       if (!byRef.has(post.ref)) byRef.set(post.ref, post)
@@ -176,8 +177,8 @@ function departmentForSelection(selectedId: string): GovElement | null {
 }
 
 function buildTree(department: GovElement): HierarchyNode | null {
-  const profile = organogramProfiles[department.id]
-  const posts = profile?.posts ?? []
+  const stored = organogramProfiles[department.id]
+  const posts = stored ? applyOrganogramPins(stored).posts : []
   const byRef = new Map<string, OrgPost>()
   for (const post of posts) {
     if (!byRef.has(post.ref)) byRef.set(post.ref, post)

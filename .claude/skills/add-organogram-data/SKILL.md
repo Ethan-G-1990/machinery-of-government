@@ -62,10 +62,20 @@ export interface OrgPost {
   fte: number       // round to 2dp; default 1 if field is blank/unparseable
 }
 
+export interface OrgPostPin {
+  ref: string
+  name: string
+  replacesName: string
+  effectiveFrom: string // ISO date the correction takes effect; importer metadata, not a display gate
+  sourceUrl: string
+}
+
 export interface OrgProfile {
   asAt: string      // ISO date 'YYYY-MM-DD' — the reference date, NOT the publication date
   sourceUrl: string // data.gov.uk dataset URL, confirmed with the user
   posts: OrgPost[]
+  limitationFlag?: string // snapshot is incomplete, or the dataset still uses an older organisation name
+  pins?: OrgPostPin[]     // holder corrections newer than the snapshot; copy these on replace
 }
 
 export const organogramProfiles: Record<string, OrgProfile> = {
@@ -170,20 +180,42 @@ export const organogramProfiles: Record<string, OrgProfile> = {
 }
 ```
 
-**Refreshing an existing organisation** — replace the existing entry entirely
-(organograms are point-in-time snapshots, not time-series; unlike staffing data
-there is no need to preserve prior snapshots in the data file):
+**Refreshing an existing organisation** — replace the posts with the new
+snapshot (organograms are point-in-time snapshots, not time-series; unlike
+staffing data there is no need to preserve prior posts in the data file).
+
+Do **not** keep the old posts alongside the new ones — the Org tab always
+displays the current snapshot.
+
+**Refuse an older snapshot.** Compare the CSV reference date with the existing
+profile's `asAt`. If the CSV date is earlier, stop. Leave the profile, its
+`pins`, and its `limitationFlag` unchanged, and tell the user the file is older.
+`input_data/2026-10-05T13-47-05Z-2025-12-31-organogram-senior.csv` is that older
+Home Office file. Do not import it over `home-office`.
+
+**Copy `pins` onto the replacement.** Do not delete them as a side effect of
+rewriting `posts`. After the new posts are in place:
+
+- If the new snapshot date is earlier than a pin's `effectiveFrom` and the post
+  with that `ref` is still named `replacesName`, keep the pin. Keep a
+  `limitationFlag` that records the same correction.
+- If the new snapshot date is on or after `effectiveFrom` and that post's own
+  name is no longer `replacesName`, drop that pin. Drop a `limitationFlag` that
+  only records the same correction. Leave any flag that is about an older
+  organisation name.
+- `applyOrganogramPins` shows the pinned name whenever
+  `post.ref === pin.ref && post.name === pin.replacesName`. It does not check
+  `effectiveFrom`. A newer-dated file that still names `replacesName` must not
+  win until the post itself names someone else.
 
 ```ts
   'co': {
     asAt: '2026-09-30',       // ← updated
     sourceUrl: '...',          // ← update if the dataset URL changed
+    pins: [ /* kept or dropped by the rules above */ ],
     posts: [ /* new posts */ ],
   },
 ```
-
-Do **not** keep the old posts alongside the new ones — the OrgTab always
-displays the current snapshot.
 
 ### 5. Verify
 
