@@ -1,11 +1,11 @@
 // Builds the Hierarchy canvas from published senior organograms.
-// SCS1–SCS3 posts come from organogramProfiles. Job/team function, where the
-// consolidated export has one, is joined by department id + post ref.
+// SCS1–SCS3 posts come from organogramProfiles. Job/team function, where
+// senior-organogram-posts.json has one, is joined by department id + post ref.
 // SCS4 rows are the published permanent secretary (or an equivalent) and are
 // not rendered: their reports attach to the existing elements.ts head so the
 // tree never grows a second permanent secretary.
 
-import postsExport from '../../organogram-posts-export.json'
+import postsExport from '../../senior-organogram-posts.json'
 import { govElements, getConnectedElements, type GovElement } from './elements'
 import { organogramProfiles, type OrgPost } from './organograms'
 

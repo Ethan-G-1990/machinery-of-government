@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent, type KeyboardEvent } from 'react'
 import type { GovElement } from '../data/elements'
 import {
   formatSnapshotDate,
@@ -14,6 +14,20 @@ interface HierarchyViewProps {
 }
 
 type GradeFilter = 'all' | 'SCS3' | 'SCS2' | 'SCS1'
+
+interface NodeEntry {
+  kind: 'node'
+  ref: string
+  node: HierarchyNode
+}
+
+interface MoreEntry {
+  kind: 'more'
+  ref: string
+  nodes: HierarchyNode[]
+}
+
+type Entry = NodeEntry | MoreEntry
 
 const FILTERS: { id: GradeFilter; label: string }[] = [
   { id: 'all', label: 'All' },
@@ -40,128 +54,366 @@ function floorOf(filter: GradeFilter): number {
   return 1
 }
 
-function seniorChildren(node: HierarchyNode, floor: number): HierarchyNode[] {
-  return node.children.filter(child => {
-    const rank = gradeRank(child.grade)
-    return rank >= floor && rank > 1
-  })
-}
-
-function scs1Children(node: HierarchyNode, floor: number): HierarchyNode[] {
-  if (floor > 1) return []
-  return node.children.filter(child => child.grade === 'SCS1')
-}
-
-function refsWithChildren(node: HierarchyNode, into: string[]) {
-  if (node.children.length > 0) into.push(node.ref)
-  for (const child of node.children) refsWithChildren(child, into)
-}
-
-interface NodeProps {
-  node: HierarchyNode
-  filter: GradeFilter
-  collapsed: Set<string>
-  scs1Open: Set<string>
-  onToggle: (ref: string) => void
-  onToggleScs1: (ref: string) => void
-}
-
-function HierarchyNodeView({ node, filter, collapsed, scs1Open, onToggle, onToggleScs1 }: NodeProps) {
+function visibleChildren(node: HierarchyNode, filter: GradeFilter): HierarchyNode[] {
   const floor = floorOf(filter)
-  const senior = seniorChildren(node, floor)
-  const juniors = scs1Children(node, floor)
-  const isCollapsed = collapsed.has(node.ref)
-  const hasChildren = senior.length + juniors.length > 0
-  const showJuniors = !isCollapsed && juniors.length > 0 && (filter === 'SCS1' || scs1Open.has(node.ref) || senior.length === 0)
-  const showJuniorGroup = !isCollapsed && juniors.length > 0 && senior.length > 0 && filter !== 'SCS1'
+  return node.children.filter(child => gradeRank(child.grade) >= floor)
+}
+
+function childEntries(node: HierarchyNode, filter: GradeFilter): Entry[] {
+  const kids = visibleChildren(node, filter)
+  if (!node.isHead || kids.length === 0) {
+    return kids.map(child => ({ kind: 'node', ref: child.ref, node: child }))
+  }
+  const top = Math.max(...kids.map(child => gradeRank(child.grade)))
+  const primary = kids.filter(child => gradeRank(child.grade) === top)
+  const rest = kids.filter(child => gradeRank(child.grade) < top)
+  const entries: Entry[] = primary.map(child => ({ kind: 'node', ref: child.ref, node: child }))
+  if (rest.length > 0) entries.push({ kind: 'more', ref: `more:${node.ref}`, nodes: rest })
+  return entries
+}
+
+function entryChildren(entry: Entry, filter: GradeFilter): Entry[] {
+  if (entry.kind === 'more') {
+    return entry.nodes.map(node => ({ kind: 'node' as const, ref: node.ref, node }))
+  }
+  return childEntries(entry.node, filter)
+}
+
+function attrValue(value: string): string {
+  return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+}
+
+function findNode(node: HierarchyNode, ref: string): HierarchyNode | null {
+  if (node.ref === ref) return node
+  for (const child of node.children) {
+    const found = findNode(child, ref)
+    if (found) return found
+  }
+  return null
+}
+
+function parentOf(node: HierarchyNode, ref: string): HierarchyNode | null {
+  if (ref === `more:${node.ref}`) return node
+  for (const child of node.children) {
+    if (child.ref === ref) return node
+    const found = parentOf(child, ref)
+    if (found) return found
+  }
+  return null
+}
+
+function ancestorRefs(node: HierarchyNode, ref: string, path: string[] = []): string[] | null {
+  const next = [...path, node.ref]
+  if (node.ref === ref) return next
+  for (const child of node.children) {
+    const found = ancestorRefs(child, ref, next)
+    if (found) return found
+  }
+  return null
+}
+
+function pathToOpen(tree: HierarchyNode, ref: string, filter: GradeFilter): string[] {
+  const path = ancestorRefs(tree, ref) ?? [tree.ref]
+  const open = new Set(path)
+  const headKids = visibleChildren(tree, filter)
+  if (headKids.length > 0) {
+    const top = Math.max(...headKids.map(child => gradeRank(child.grade)))
+    for (const id of path) {
+      const node = findNode(tree, id)
+      if (!node || node.ref === tree.ref) continue
+      if (tree.children.some(child => child.ref === id) && gradeRank(node.grade) < top) {
+        open.add(`more:${tree.ref}`)
+      }
+    }
+  }
+  return [...open]
+}
+
+function dropNode(expanded: Set<string>, node: HierarchyNode) {
+  expanded.delete(node.ref)
+  expanded.delete(`more:${node.ref}`)
+  for (const child of node.children) dropNode(expanded, child)
+}
+
+function dropMore(expanded: Set<string>, parent: HierarchyNode, filter: GradeFilter) {
+  expanded.delete(`more:${parent.ref}`)
+  const kids = visibleChildren(parent, filter)
+  if (kids.length === 0) return
+  const top = Math.max(...kids.map(child => gradeRank(child.grade)))
+  for (const child of kids) {
+    if (gradeRank(child.grade) < top) dropNode(expanded, child)
+  }
+}
+
+function closeSiblings(expanded: Set<string>, parent: HierarchyNode, except: string, filter: GradeFilter) {
+  if (`more:${parent.ref}` !== except) dropMore(expanded, parent, filter)
+  for (const child of parent.children) {
+    if (child.ref !== except) dropNode(expanded, child)
+  }
+}
+
+function centerOnHead(scroller: HTMLElement) {
+  const card = scroller.querySelector<HTMLElement>('.hierarchy-card-head')
+  if (!card) return
+  const scrollerRect = scroller.getBoundingClientRect()
+  const cardRect = card.getBoundingClientRect()
+  const delta = (cardRect.left + cardRect.width / 2) - (scrollerRect.left + scrollerRect.width / 2)
+  scroller.scrollLeft += delta
+  scroller.scrollTop = 0
+}
+
+// Child rows sit outside the sibling row, centred on the clicked card, so a
+// wide lower level cannot push the cards above it apart.
+function layoutLevel(level: HTMLElement) {
+  const row = level.querySelector<HTMLElement>(':scope > .hierarchy-row')
+  if (!row) return
+  const belows = [...level.querySelectorAll<HTMLElement>(':scope > .hierarchy-below')]
+  row.style.marginLeft = '0px'
+  level.style.minWidth = ''
+  for (const below of belows) below.style.marginLeft = '0px'
+  if (belows.length === 0) return
+
+  const rowRect = row.getBoundingClientRect()
+  for (const below of belows) {
+    const forRef = below.dataset.for
+    if (!forRef) continue
+    const card = row.querySelector<HTMLElement>(`[data-ref="${attrValue(forRef)}"]`)
+    const childRow = below.querySelector<HTMLElement>(':scope > .hierarchy-level > .hierarchy-row')
+    if (!card || !childRow) continue
+    const cardRect = card.getBoundingClientRect()
+    const childRect = childRow.getBoundingClientRect()
+    const belowRect = below.getBoundingClientRect()
+    const cardCenter = cardRect.left + cardRect.width / 2 - rowRect.left
+    const childCenter = childRect.left + childRect.width / 2 - belowRect.left
+    below.style.marginLeft = `${cardCenter - childCenter}px`
+  }
+
+  let right = rowRect.width
+  const origin = row.getBoundingClientRect().left
+  for (const below of belows) {
+    const rect = below.getBoundingClientRect()
+    right = Math.max(right, rect.right - origin)
+    const forRef = below.dataset.for
+    if (!forRef) continue
+    const card = row.querySelector<HTMLElement>(`[data-ref="${attrValue(forRef)}"]`)
+    if (!card) continue
+    const cardRect = card.getBoundingClientRect()
+    below.style.setProperty('--stem', `${cardRect.left + cardRect.width / 2 - rect.left - 0.75}px`)
+  }
+  if (right > rowRect.width + 1) level.style.minWidth = `${Math.ceil(right)}px`
+}
+
+function containChart(scroller: HTMLElement) {
+  const shift = scroller.querySelector<HTMLElement>('.hierarchy-chart-shift')
+  if (!shift) return
+  const prev = parseFloat(shift.style.paddingLeft) || 0
+  const scroll = scroller.scrollLeft
+  shift.style.paddingLeft = '0px'
+  const origin = shift.getBoundingClientRect().left
+  let min = 0
+  for (const node of shift.querySelectorAll<HTMLElement>('.hierarchy-row')) {
+    const left = node.getBoundingClientRect().left - origin
+    if (left < min) min = left
+  }
+  const pad = min < -0.5 ? Math.ceil(-min) : 0
+  shift.style.paddingLeft = pad ? `${pad}px` : ''
+  // Clearing the pad clamps scrollLeft. Put it back after the pad is restored.
+  scroller.scrollLeft = scroll + (pad - prev)
+}
+
+function stopCardToggle(event: MouseEvent | KeyboardEvent) {
+  event.stopPropagation()
+}
+
+interface CardProps {
+  node: HierarchyNode
+  hasChildren: boolean
+  open: boolean
+  childCount: number
+  clickable: boolean
+  onActivate: () => void
+}
+
+function PostCard({ node, hasChildren, open, childCount, clickable, onActivate }: CardProps) {
   const colour = GRADE_COLOURS[node.grade] ?? '#003366'
-  const childCount = senior.length + juniors.length
+  const activate = (event: MouseEvent) => {
+    if ((event.target as HTMLElement).closest('.hierarchy-function')) return
+    onActivate()
+  }
+  return (
+    <div
+      className={[
+        'hierarchy-card',
+        node.isHead ? 'hierarchy-card-head' : '',
+        clickable ? 'hierarchy-card-button' : '',
+        open ? 'hierarchy-card-open' : '',
+      ].filter(Boolean).join(' ')}
+      style={{ '--grade-colour': colour } as CSSProperties}
+      role="treeitem"
+      tabIndex={clickable || node.jobFunction ? 0 : undefined}
+      aria-expanded={hasChildren ? open : undefined}
+      onClick={clickable ? activate : undefined}
+      onKeyDown={clickable ? (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          onActivate()
+        }
+      } : undefined}
+    >
+      <div className="hierarchy-card-top">
+        {hasChildren && (
+          <span className={`hierarchy-chevron${open ? '' : ' hierarchy-chevron-collapsed'}`} aria-hidden="true">▾</span>
+        )}
+        <span className="hierarchy-grade">{node.grade}</span>
+        {hasChildren && <span className="hierarchy-count">{childCount}</span>}
+      </div>
+      <span className={`hierarchy-name${node.nameRedacted ? ' hierarchy-redacted' : ''}`}>{node.name}</span>
+      <span className={`hierarchy-title${node.titleRedacted ? ' hierarchy-redacted' : ''}`}>{node.title}</span>
+      <span className="hierarchy-unit">{node.unit}</span>
+      {node.jobFunction && (
+        <span
+          className="hierarchy-function"
+          role="note"
+          onClick={stopCardToggle}
+          onMouseDown={stopCardToggle}
+          onKeyDown={stopCardToggle}
+        >
+          {node.jobFunction}
+        </span>
+      )}
+    </div>
+  )
+}
+
+function moreGrade(nodes: HierarchyNode[]): { label: string; colour: string } {
+  const grades = [...new Set(nodes.map(node => node.grade))]
+  if (grades.length === 1) {
+    const label = grades[0]
+    return { label, colour: GRADE_COLOURS[label] ?? '#7d6608' }
+  }
+  const senior = [...nodes].sort((a, b) => gradeRank(b.grade) - gradeRank(a.grade))[0]
+  return { label: 'Posts', colour: GRADE_COLOURS[senior?.grade ?? ''] ?? '#003366' }
+}
+
+function MoreCard({ nodes, open, onActivate }: { nodes: HierarchyNode[]; open: boolean; onActivate: () => void }) {
+  const grade = moreGrade(nodes)
+  return (
+    <div
+      className={`hierarchy-card hierarchy-card-button hierarchy-scs1-card${open ? ' hierarchy-card-open' : ''}`}
+      style={{ '--grade-colour': grade.colour } as CSSProperties}
+      role="treeitem"
+      tabIndex={0}
+      aria-expanded={open}
+      aria-label={open ? `Hide ${nodes.length} lower-grade posts` : `Show ${nodes.length} lower-grade posts`}
+      onClick={onActivate}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          onActivate()
+        }
+      }}
+    >
+      <span className="hierarchy-card-top">
+        <span className={`hierarchy-chevron${open ? '' : ' hierarchy-chevron-collapsed'}`} aria-hidden="true">▾</span>
+        <span className="hierarchy-grade">{grade.label}</span>
+        <span className="hierarchy-count">{nodes.length}</span>
+      </span>
+      <span className="hierarchy-scs1-label">{open ? 'Hide posts' : 'Show posts'}</span>
+    </div>
+  )
+}
+
+interface LevelProps {
+  entries: Entry[]
+  plain?: boolean
+  filter: GradeFilter
+  expanded: Set<string>
+  onToggle: (ref: string) => void
+}
+
+function Level({ entries, plain, filter, expanded, onToggle }: LevelProps) {
+  const levelRef = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    if (levelRef.current) layoutLevel(levelRef.current)
+  })
+
+  const rowClass = [
+    'hierarchy-row',
+    plain ? 'hierarchy-row-plain' : '',
+    entries.length === 1 ? 'hierarchy-row-single' : '',
+  ].filter(Boolean).join(' ')
+
+  const openEntries = entries.filter(entry => expanded.has(entry.ref) && entryChildren(entry, filter).length > 0)
 
   return (
-    <li className="hierarchy-node" role="treeitem" aria-expanded={hasChildren ? !isCollapsed : undefined}>
-      <div className={`hierarchy-post${node.isHead ? ' hierarchy-post-head' : ''}`}>
-        {hasChildren ? (
-          <button
-            type="button"
-            className="hierarchy-toggle"
-            aria-expanded={!isCollapsed}
-            aria-label={isCollapsed ? `Expand ${node.name}` : `Collapse ${node.name}`}
-            onClick={() => onToggle(node.ref)}
-          >
-            <span className={`hierarchy-chevron${isCollapsed ? ' hierarchy-chevron-collapsed' : ''}`} aria-hidden="true">▾</span>
-          </button>
-        ) : (
-          <span className="hierarchy-toggle-spacer" aria-hidden="true" />
-        )}
-        <div className="hierarchy-post-main" tabIndex={node.jobFunction ? 0 : undefined}>
-          <div className="hierarchy-post-line">
-            <span className="hierarchy-grade" style={{ '--grade-colour': colour } as CSSProperties}>
-              {node.grade}
-            </span>
-            <span className={`hierarchy-name${node.nameRedacted ? ' hierarchy-redacted' : ''}`}>{node.name}</span>
-            {hasChildren && <span className="hierarchy-count">{childCount}</span>}
-          </div>
-          <span className={`hierarchy-title${node.titleRedacted ? ' hierarchy-redacted' : ''}`}>{node.title}</span>
-          <span className="hierarchy-unit">{node.unit}</span>
-          {node.jobFunction && (
-            <span className="hierarchy-function" role="note">{node.jobFunction}</span>
-          )}
-        </div>
+    <div className="hierarchy-level" ref={levelRef}>
+      <div className={rowClass}>
+        {entries.map(entry => {
+          if (entry.kind === 'more') {
+            return (
+              <div key={entry.ref} className="hierarchy-slot" data-ref={entry.ref}>
+                <MoreCard nodes={entry.nodes} open={expanded.has(entry.ref)} onActivate={() => onToggle(entry.ref)} />
+              </div>
+            )
+          }
+          const reports = visibleChildren(entry.node, filter)
+          const nested = entryChildren(entry, filter)
+          return (
+            <div
+              key={entry.ref}
+              className={`hierarchy-slot${entry.node.isHead ? ' hierarchy-slot-head' : ''}`}
+              data-ref={entry.ref}
+            >
+              <PostCard
+                node={entry.node}
+                hasChildren={nested.length > 0}
+                open={expanded.has(entry.ref)}
+                childCount={reports.length}
+                clickable={nested.length > 0}
+                onActivate={() => onToggle(entry.ref)}
+              />
+            </div>
+          )
+        })}
       </div>
+      {openEntries.map(entry => (
+        <div key={entry.ref} className="hierarchy-below" data-for={entry.ref}>
+          <Level
+            entries={entryChildren(entry, filter)}
+            filter={filter}
+            expanded={expanded}
+            onToggle={onToggle}
+          />
+        </div>
+      ))}
+    </div>
+  )
+}
 
-      {hasChildren && !isCollapsed && (
-        <ul className="hierarchy-children" role="group">
-          {senior.map(child => (
-            <HierarchyNodeView
-              key={child.ref}
-              node={child}
-              filter={filter}
-              collapsed={collapsed}
-              scs1Open={scs1Open}
-              onToggle={onToggle}
-              onToggleScs1={onToggleScs1}
-            />
-          ))}
-          {showJuniorGroup && (
-            <li className="hierarchy-node" role="treeitem" aria-expanded={showJuniors}>
-              <button
-                type="button"
-                className="hierarchy-scs1-group"
-                aria-expanded={showJuniors}
-                onClick={() => onToggleScs1(node.ref)}
-              >
-                <span className={`hierarchy-chevron${showJuniors ? '' : ' hierarchy-chevron-collapsed'}`} aria-hidden="true">▾</span>
-                <span className="hierarchy-grade" style={{ '--grade-colour': GRADE_COLOURS.SCS1 } as CSSProperties}>SCS1</span>
-                <span className="hierarchy-scs1-label">{showJuniors ? 'Hide posts' : 'Show posts'}</span>
-                <span className="hierarchy-count">{juniors.length}</span>
-              </button>
-              {showJuniors && (
-                <ul className="hierarchy-children" role="group">
-                  {juniors.map(child => (
-                    <HierarchyNodeView
-                      key={child.ref}
-                      node={child}
-                      filter={filter}
-                      collapsed={collapsed}
-                      scs1Open={scs1Open}
-                      onToggle={onToggle}
-                      onToggleScs1={onToggleScs1}
-                    />
-                  ))}
-                </ul>
-              )}
-            </li>
-          )}
-          {!showJuniorGroup && showJuniors && juniors.map(child => (
-            <HierarchyNodeView
-              key={child.ref}
-              node={child}
-              filter={filter}
-              collapsed={collapsed}
-              scs1Open={scs1Open}
-              onToggle={onToggle}
-              onToggleScs1={onToggleScs1}
-            />
+function WideBranch({
+  node,
+  filter,
+  onOpen,
+}: {
+  node: HierarchyNode
+  filter: GradeFilter
+  onOpen: (ref: string) => void
+}) {
+  const kids = visibleChildren(node, filter)
+  return (
+    <li className="hierarchy-branch" data-ref={node.ref}>
+      <PostCard
+        node={node}
+        hasChildren={kids.length > 0}
+        open={kids.length > 0}
+        childCount={kids.length}
+        clickable
+        onActivate={() => onOpen(node.ref)}
+      />
+      {kids.length > 0 && (
+        <ul className="hierarchy-branches" role="group">
+          {kids.map(child => (
+            <WideBranch key={child.ref} node={child} filter={filter} onOpen={onOpen} />
           ))}
         </ul>
       )}
@@ -191,58 +443,104 @@ function Ministers({ ministers }: { ministers: GovElement[] }) {
   )
 }
 
-function HierarchyTree({ model }: { model: HierarchyModel }) {
+function HierarchyTree({ model }: { model: HierarchyModel & { tree: HierarchyNode } }) {
   const tree = model.tree
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const recenterRef = useRef(true)
+  const pendingCenter = useRef(false)
+  const openedRef = useRef<string | null>(null)
+  const headAnchor = useRef<number | null>(null)
   const [filter, setFilter] = useState<GradeFilter>('all')
-  const [collapsed, setCollapsed] = useState(() => new Set(model.initiallyCollapsed))
-  const [scs1Open, setScs1Open] = useState<Set<string>>(() => new Set())
+  const [expanded, setExpanded] = useState(() => new Set([tree.ref]))
+  const [wide, setWide] = useState(false)
 
-  if (!tree) return null
+  if (recenterRef.current) headAnchor.current = null
+  else if (scrollRef.current) {
+    const head = scrollRef.current.querySelector<HTMLElement>('.hierarchy-card-head')
+    headAnchor.current = head ? head.getBoundingClientRect().left : null
+  }
+
+  useLayoutEffect(() => {
+    const scroller = scrollRef.current
+    if (!scroller) return
+    containChart(scroller)
+    if (recenterRef.current) {
+      pendingCenter.current = true
+      recenterRef.current = false
+      openedRef.current = null
+    }
+    if (pendingCenter.current) {
+      centerOnHead(scroller)
+      const frame = requestAnimationFrame(() => {
+        if (scrollRef.current) centerOnHead(scrollRef.current)
+        pendingCenter.current = false
+      })
+      return () => cancelAnimationFrame(frame)
+    }
+    const anchor = headAnchor.current
+    const head = scroller.querySelector<HTMLElement>('.hierarchy-card-head')
+    if (head && anchor != null) {
+      scroller.scrollLeft += head.getBoundingClientRect().left - anchor
+    }
+    const opened = openedRef.current
+    if (opened) {
+      const card = scroller.querySelector<HTMLElement>(`[data-ref="${attrValue(opened)}"]`)
+      card?.scrollIntoView({ inline: 'nearest', block: 'nearest' })
+      openedRef.current = null
+    }
+  })
 
   const chooseFilter = (next: GradeFilter) => {
     setFilter(next)
-    if (next === 'SCS1') {
-      setCollapsed(new Set())
-    } else if (next === 'all') {
-      setCollapsed(new Set(model.initiallyCollapsed))
-      setScs1Open(new Set())
-    }
+    setWide(false)
+    setExpanded(new Set([tree.ref]))
+    recenterRef.current = true
   }
 
   const expandAll = () => {
-    const refs: string[] = []
-    refsWithChildren(tree, refs)
-    setCollapsed(new Set())
-    setScs1Open(new Set(refs))
+    setWide(true)
+    recenterRef.current = true
   }
 
   const collapseAll = () => {
-    const refs: string[] = []
-    refsWithChildren(tree, refs)
-    setCollapsed(new Set(refs))
-    setScs1Open(new Set())
+    setWide(false)
+    setExpanded(new Set())
+    recenterRef.current = true
   }
 
   const toggle = (ref: string) => {
-    setCollapsed(prev => {
+    setWide(false)
+    setExpanded(prev => {
       const next = new Set(prev)
-      if (next.has(ref)) next.delete(ref)
-      else next.add(ref)
+      if (next.has(ref)) {
+        if (ref.startsWith('more:')) {
+          const parent = findNode(tree, ref.slice('more:'.length))
+          if (parent) dropMore(next, parent, filter)
+          else next.delete(ref)
+        } else {
+          const node = findNode(tree, ref)
+          if (node) dropNode(next, node)
+          else next.delete(ref)
+        }
+        return next
+      }
+      const parent = parentOf(tree, ref)
+      if (parent) closeSiblings(next, parent, ref, filter)
+      next.add(ref)
       return next
     })
+    openedRef.current = ref
   }
 
-  const toggleScs1 = (ref: string) => {
-    setScs1Open(prev => {
-      const next = new Set(prev)
-      if (next.has(ref)) next.delete(ref)
-      else next.add(ref)
-      return next
-    })
+  const openPath = (ref: string) => {
+    setWide(false)
+    setExpanded(new Set(pathToOpen(tree, ref, filter)))
+    openedRef.current = ref
   }
 
-  const filteredRootEmpty = seniorChildren(tree, floorOf(filter)).length === 0
-    && scs1Children(tree, floorOf(filter)).length === 0
+  const filteredRootEmpty = wide
+    ? visibleChildren(tree, filter).length === 0
+    : expanded.has(tree.ref) && childEntries(tree, filter).length === 0
 
   return (
     <>
@@ -272,18 +570,25 @@ function HierarchyTree({ model }: { model: HierarchyModel }) {
           </div>
         </div>
       </div>
-      <div className="hierarchy-scroll">
-        <ul className="hierarchy-tree" role="tree" aria-label={`${model.departmentName} senior civil service`}>
-          <HierarchyNodeView
-            node={tree}
-            filter={filter}
-            collapsed={collapsed}
-            scs1Open={scs1Open}
-            onToggle={toggle}
-            onToggleScs1={toggleScs1}
-          />
-        </ul>
-        {filteredRootEmpty && !collapsed.has(tree.ref) && (
+      <div className="hierarchy-scroll" ref={scrollRef}>
+        <div className={`hierarchy-chart${wide ? ' hierarchy-wide' : ''}`} role="tree" aria-label={`${model.departmentName} senior civil service`}>
+          <div className="hierarchy-chart-shift">
+            {wide ? (
+              <ul className="hierarchy-branches hierarchy-branches-root">
+                <WideBranch node={tree} filter={filter} onOpen={openPath} />
+              </ul>
+            ) : (
+              <Level
+                entries={[{ kind: 'node', ref: tree.ref, node: tree }]}
+                plain
+                filter={filter}
+                expanded={expanded}
+                onToggle={toggle}
+              />
+            )}
+          </div>
+        </div>
+        {filteredRootEmpty && (
           <p className="hierarchy-filter-empty">
             No {filter === 'all' ? 'SCS1–SCS3' : filter} posts are published under this head.
           </p>
@@ -357,7 +662,7 @@ export default function HierarchyView({ selectedElementId }: HierarchyViewProps)
         </>
       )}
       {model.kind === 'ready' && model.tree && (
-        <HierarchyTree key={model.departmentId} model={model} />
+        <HierarchyTree key={model.departmentId} model={{ ...model, tree: model.tree }} />
       )}
       <Attribution model={model} />
     </div>

@@ -1,4 +1,8 @@
 .hierarchy-view {
+  --hierarchy-link: 0.7rem;
+  --hierarchy-line: #95a5a6;
+  --hierarchy-card: 11rem;
+  --hierarchy-gap: 0.35rem;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -122,70 +126,283 @@
 }
 
 .hierarchy-filter-empty {
-  margin: 0.75rem 0 0 1.6rem;
+  margin: 0.75rem auto 0;
+  max-width: 28rem;
+  text-align: center;
   color: #5f6b76;
   font-size: 0.85rem;
 }
 
-.hierarchy-tree,
-.hierarchy-children {
+/* Tight org chart. A row is only as wide as its cards. Open reports render
+   underneath that row, centred on the clicked card, so siblings stay packed. */
+.hierarchy-chart {
+  display: flex;
+  justify-content: center;
+  width: max-content;
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+/* content-box so a left pad grows the scroll width instead of squeezing the cards */
+.hierarchy-chart-shift {
+  box-sizing: content-box;
+  width: max-content;
+  display: flex;
+  justify-content: center;
+}
+
+.hierarchy-level {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: max-content;
+  position: relative;
+}
+
+.hierarchy-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--hierarchy-gap);
+  position: relative;
+  padding-top: var(--hierarchy-link);
+  margin: 0;
+}
+
+.hierarchy-row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: calc(var(--hierarchy-card) / 2);
+  right: calc(var(--hierarchy-card) / 2);
+  border-top: 1.5px solid var(--hierarchy-line);
+  pointer-events: none;
+}
+
+.hierarchy-row-plain,
+.hierarchy-row-single {
+  padding-top: 0;
+}
+
+.hierarchy-row-plain::before,
+.hierarchy-row-single::before {
+  content: none;
+}
+
+.hierarchy-slot {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--hierarchy-card);
+}
+
+.hierarchy-slot::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--hierarchy-link) * -1);
+  left: calc(50% - 0.75px);
+  height: var(--hierarchy-link);
+  border-left: 1.5px solid var(--hierarchy-line);
+  pointer-events: none;
+}
+
+.hierarchy-row-plain .hierarchy-slot::before,
+.hierarchy-row-single .hierarchy-slot::before {
+  content: none;
+}
+
+.hierarchy-slot-head {
+  width: auto;
+}
+
+.hierarchy-below {
+  position: relative;
+  padding-top: var(--hierarchy-link);
+}
+
+.hierarchy-below::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--stem, 50%);
+  width: 0;
+  height: var(--hierarchy-link);
+  border-left: 1.5px solid var(--hierarchy-line);
+  pointer-events: none;
+}
+
+/* Expand all uses the full nested chart, so every branch can be open at once. */
+.hierarchy-wide .hierarchy-branches {
+  display: flex;
+  justify-content: center;
+  position: relative;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: var(--hierarchy-link) 0 0;
 }
 
-.hierarchy-children {
-  margin-left: 0.7rem;
-  padding-left: 0.85rem;
-  border-left: 1.5px solid #e6ebef;
+.hierarchy-wide .hierarchy-branches::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: calc(50% - 0.75px);
+  width: 0;
+  height: var(--hierarchy-link);
+  border-left: 1.5px solid var(--hierarchy-line);
+  pointer-events: none;
 }
 
-.hierarchy-node {
-  margin: 0;
+.hierarchy-wide .hierarchy-branches-root {
+  padding-top: 0;
 }
 
-.hierarchy-post {
+.hierarchy-wide .hierarchy-branches-root::before {
+  content: none;
+}
+
+.hierarchy-wide .hierarchy-branch {
   display: flex;
-  align-items: flex-start;
-  gap: 0.35rem;
-  padding: 0.28rem 0.2rem;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 0 0 auto;
+  list-style: none;
+  margin: 0;
+  padding: var(--hierarchy-link) 0.3rem 0;
+}
+
+.hierarchy-wide .hierarchy-branch::before,
+.hierarchy-wide .hierarchy-branch::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: calc(50% + 1px);
+  height: var(--hierarchy-link);
+  border-top: 1.5px solid var(--hierarchy-line);
+  pointer-events: none;
+}
+
+.hierarchy-wide .hierarchy-branch::before {
+  right: calc(50% - 1px);
+}
+
+.hierarchy-wide .hierarchy-branch::after {
+  left: 50%;
+  width: 50%;
+  border-left: 1.5px solid var(--hierarchy-line);
+}
+
+.hierarchy-wide .hierarchy-branch:only-child {
+  padding-top: 0;
+}
+
+.hierarchy-wide .hierarchy-branch:only-child::before,
+.hierarchy-wide .hierarchy-branch:only-child::after,
+.hierarchy-wide .hierarchy-branches-root > .hierarchy-branch::before,
+.hierarchy-wide .hierarchy-branches-root > .hierarchy-branch::after {
+  content: none;
+}
+
+.hierarchy-wide .hierarchy-branch:first-child::before,
+.hierarchy-wide .hierarchy-branch:last-child::after {
+  border: 0 none;
+}
+
+.hierarchy-wide .hierarchy-branch:last-child::before {
+  border-right: 1.5px solid var(--hierarchy-line);
+}
+
+.hierarchy-wide .hierarchy-slot {
+  width: auto;
+}
+
+.hierarchy-wide .hierarchy-slot::before {
+  content: none;
+}
+
+.hierarchy-wide .hierarchy-card {
+  width: var(--hierarchy-card);
+}
+
+.hierarchy-wide .hierarchy-card-head {
+  width: max-content;
+  min-width: var(--hierarchy-card);
+  max-width: 16rem;
+}
+
+.hierarchy-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.65rem 0.55rem 0.7rem;
+  background: #f8f9fa;
+  border: 1px solid #e6ebef;
+  border-left: 3px solid var(--grade-colour, #003366);
   border-radius: 4px;
+  text-align: left;
 }
 
-.hierarchy-post-head {
-  padding-top: 0.15rem;
-  padding-bottom: 0.45rem;
-}
-
-.hierarchy-toggle,
-.hierarchy-scs1-group {
-  background: none;
-  border: 0;
-  padding: 0.15rem;
+.hierarchy-card-button {
   cursor: pointer;
-  color: #7f8c8d;
-  line-height: 1;
+}
+
+.hierarchy-card-open {
+  background: #ecf0f1;
+}
+
+.hierarchy-slot-head .hierarchy-card-head {
+  width: max-content;
+  min-width: var(--hierarchy-card);
+  max-width: 16rem;
+}
+
+button.hierarchy-card {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+
+.hierarchy-card:hover,
+.hierarchy-card:focus-within,
+.hierarchy-card-open:hover,
+.hierarchy-card-open:focus-within {
+  z-index: 4;
+  background: #ecf0f1;
+}
+
+.hierarchy-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 0;
 }
 
 .hierarchy-toggle {
-  margin-top: 0.15rem;
+  background: none;
+  border: 0;
+  padding: 0.1rem;
+  margin: 0;
+  cursor: pointer;
+  color: #7f8c8d;
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 .hierarchy-toggle:hover,
-.hierarchy-scs1-group:hover {
+.hierarchy-scs1-card:hover {
   color: #2980b9;
 }
 
 .hierarchy-toggle:focus-visible,
-.hierarchy-scs1-group:focus-visible,
-.hierarchy-post-main:focus-visible {
+.hierarchy-scs1-card:focus-visible,
+.hierarchy-card:focus-visible {
   outline: 2px solid #2980b9;
   outline-offset: 1px;
-}
-
-.hierarchy-toggle-spacer {
-  width: 1.15rem;
-  flex-shrink: 0;
 }
 
 .hierarchy-chevron {
@@ -199,20 +416,9 @@
   transform: rotate(-90deg);
 }
 
-.hierarchy-post-main {
-  position: relative;
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.08rem;
-}
-
-.hierarchy-post-line {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-width: 0;
+.hierarchy-card-button:hover .hierarchy-chevron,
+.hierarchy-card-open .hierarchy-chevron {
+  color: #2980b9;
 }
 
 .hierarchy-grade {
@@ -226,23 +432,30 @@
   background: color-mix(in srgb, var(--grade-colour) 12%, #fff);
 }
 
+.hierarchy-card-head .hierarchy-grade {
+  white-space: nowrap;
+}
+
 .hierarchy-name {
   font-size: 0.875rem;
   font-weight: 600;
   color: #2c3e50;
   line-height: 1.3;
+  overflow-wrap: break-word;
 }
 
 .hierarchy-title {
   font-size: 0.78rem;
   color: #555;
   line-height: 1.35;
+  overflow-wrap: break-word;
 }
 
 .hierarchy-unit {
   font-size: 0.72rem;
   font-style: italic;
   color: #7f8c8d;
+  overflow-wrap: break-word;
 }
 
 .hierarchy-redacted {
@@ -283,20 +496,10 @@
   color: #243038;
 }
 
-.hierarchy-post-main:hover > .hierarchy-function,
-.hierarchy-post-main:focus > .hierarchy-function,
-.hierarchy-post-main:focus-within > .hierarchy-function {
+.hierarchy-card:hover > .hierarchy-function,
+.hierarchy-card:focus > .hierarchy-function,
+.hierarchy-card:focus-within > .hierarchy-function {
   display: block;
-}
-
-.hierarchy-scs1-group {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  width: 100%;
-  text-align: left;
-  padding: 0.25rem 0.15rem;
-  border-radius: 4px;
 }
 
 .hierarchy-scs1-label {
@@ -341,6 +544,7 @@
 }
 
 .app-dark .hierarchy-view {
+  --hierarchy-line: var(--dm-text-faint);
   background: #0d1117;
   color: #e6edf3;
 }
@@ -387,12 +591,20 @@
 .app-dark .hierarchy-unit,
 .app-dark .hierarchy-redacted,
 .app-dark .hierarchy-toggle,
-.app-dark .hierarchy-scs1-group {
+.app-dark .hierarchy-scs1-card {
   color: #8b949e;
 }
 
-.app-dark .hierarchy-children {
-  border-left-color: #30363d;
+.app-dark .hierarchy-card {
+  background: var(--dm-bg);
+  border-color: var(--dm-border);
+  border-left-color: var(--grade-colour, #8ec1ff);
+}
+
+.app-dark .hierarchy-card-open,
+.app-dark .hierarchy-card:hover,
+.app-dark .hierarchy-card:focus-within {
+  background: var(--dm-bg-subtle);
 }
 
 .app-dark .hierarchy-grade {
