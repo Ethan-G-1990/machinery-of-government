@@ -335,7 +335,7 @@ function App() {
               isMobile={isMobile}
             />
           ) : viewMode === 'hierarchy' ? (
-            <HierarchyView selectedElementId={selectedElementId} />
+            <HierarchyView selectedElementId={selectedElementId} onSelectElement={(id) => selectElement(id, true)} />
           ) : (
             <FullView
               onSelectElement={selectElement}
