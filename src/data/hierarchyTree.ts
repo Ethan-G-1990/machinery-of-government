@@ -1,15 +1,24 @@
 // Builds the Hierarchy canvas from published senior organograms.
-// SCS1–SCS3 posts come from organogramProfiles. Job/team function, where
+// SCS1–SCS4 posts come from organogramProfiles. Job/team function, where
 // senior-organogram-posts.json has one, is joined by department id + post ref.
-// SCS4 rows are the published permanent secretary (or an equivalent) and are
-// not rendered: their reports attach to the existing elements.ts head so the
-// tree never grows a second permanent secretary.
+// The chart root is the senior post in the organogram, not the elements.ts
+// office-holder. A published post is drawn once. People who report to the root
+// stay under that post.
 
 import postsExport from '../../senior-organogram-posts.json'
 import { govElements, getConnectedElements, type GovElement } from './elements'
 import { organogramProfiles, type OrgPost } from './organograms'
 
-const SHOWN_GRADES = new Set(['SCS1', 'SCS2', 'SCS3'])
+const SHOWN_GRADES = new Set(['SCS1', 'SCS2', 'SCS3', 'SCS4'])
+
+const SENIORITY_BY_GRADE: Record<string, string> = {
+  SCS4: 'Permanent Secretary',
+  SCS3: 'Director General',
+  SCS2: 'Director',
+  SCS1: 'Deputy Director',
+}
+
+const HEAD_TITLE = /permanent secretary|perm sec|\bPUS\b|chief executive|director of public prosecutions|national statistician/i
 
 const CHIEF_BY_DEPARTMENT: Record<string, string> = {
   cps: 'cps-dpp',
@@ -19,17 +28,13 @@ const CHIEF_BY_DEPARTMENT: Record<string, string> = {
   uksa: 'uksa-head',
 }
 
-const HONORIFICS = new Set([
-  'dame', 'sir', 'lord', 'lady', 'dr', 'prof', 'professor',
-  'cb', 'cbe', 'dcb', 'kcb', 'kcmg', 'kbe', 'obe', 'mbe', 'cvo', 'dso', 'qc', 'kc',
-])
-
 export interface HierarchyNode {
   ref: string
   name: string
   title: string
   unit: string
   grade: string
+  seniority: string
   jobFunction?: string
   nameRedacted: boolean
   titleRedacted: boolean
@@ -65,16 +70,8 @@ export function gradeRank(grade: string): number {
   if (grade === 'SCS1') return 1
   if (grade === 'SCS2') return 2
   if (grade === 'SCS3') return 3
+  if (grade === 'SCS4') return 4
   return 0
-}
-
-function nameKey(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z\s]/g, ' ')
-    .split(/\s+/)
-    .filter(word => word && !HONORIFICS.has(word))
-    .join(' ')
 }
 
 function isRedacted(value: string): boolean {
@@ -94,16 +91,47 @@ function headElement(departmentId: string): GovElement | null {
   return chiefId ? govElements[chiefId] ?? null : null
 }
 
-function headGradeLabel(el: GovElement): string {
-  if (el.id.endsWith('-perm-sec')) return 'Permanent Secretary'
-  const comma = el.name.indexOf(',')
-  return comma === -1 ? el.name : el.name.slice(0, comma)
+export interface HierarchyDepartmentChoice {
+  id: string
+  name: string
+  holder: string | null
 }
 
-function isDuplicateHead(post: OrgPost, head: GovElement): boolean {
-  if (!head.currentHolder) return false
-  if (nameKey(post.name) !== nameKey(head.currentHolder)) return false
-  return /permanent secretary|perm sec|\bPUS\b|chief executive|director of public prosecutions|national statistician/i.test(post.title)
+export function listHierarchyDepartments(): HierarchyDepartmentChoice[] {
+  const choices: HierarchyDepartmentChoice[] = []
+  for (const id of Object.keys(organogramProfiles)) {
+    const department = govElements[id]
+    if (!department) continue
+    const profile = organogramProfiles[id]
+    const byRef = new Map<string, OrgPost>()
+    for (const post of profile?.posts ?? []) {
+      if (!byRef.has(post.ref)) byRef.set(post.ref, post)
+    }
+    const published = selectHeadPost(profile?.posts ?? [], byRef)
+    const publishedName = published ? displayField(published.name) : null
+    const head = headElement(id)
+    const holder = publishedName && !publishedName.redacted
+      ? publishedName.text
+      : head ? (head.currentHolder?.trim() || head.name) : null
+    choices.push({ id, name: department.name, holder })
+  }
+  choices.sort((a, b) => a.name.localeCompare(b.name, 'en-GB'))
+  return choices
+}
+
+function isTopLevel(post: OrgPost, byRef: Map<string, OrgPost>): boolean {
+  return !post.reportsTo || !byRef.has(post.reportsTo)
+}
+
+function selectHeadPost(posts: OrgPost[], byRef: Map<string, OrgPost>): OrgPost | null {
+  const tops = posts.filter(post => SHOWN_GRADES.has(post.grade) && isTopLevel(post, byRef))
+  if (tops.length === 0) return null
+  const bestRank = Math.max(...tops.map(post => gradeRank(post.grade)))
+  const best = tops.filter(post => gradeRank(post.grade) === bestRank)
+  const primary = best.filter(post => HEAD_TITLE.test(post.title) && !/\b(second|interim)\b/i.test(post.title))
+  const titled = best.filter(post => HEAD_TITLE.test(post.title))
+  const pool = primary.length > 0 ? primary : titled.length > 0 ? titled : best
+  return [...pool].sort((a, b) => a.name.localeCompare(b.name, 'en-GB'))[0]
 }
 
 function comparePosts(a: OrgPost, b: OrgPost): number {
@@ -147,18 +175,21 @@ function departmentForSelection(selectedId: string): GovElement | null {
   return headed[0] ?? null
 }
 
-function buildTree(department: GovElement, head: GovElement): HierarchyNode {
+function buildTree(department: GovElement): HierarchyNode | null {
   const profile = organogramProfiles[department.id]
   const posts = profile?.posts ?? []
   const byRef = new Map<string, OrgPost>()
   for (const post of posts) {
     if (!byRef.has(post.ref)) byRef.set(post.ref, post)
   }
+  const headPost = selectHeadPost(posts, byRef)
+  if (!headPost) return null
+  const headRef = headPost.ref
 
   const shownOnce: OrgPost[] = []
   const shownRefs = new Set<string>()
   for (const post of posts) {
-    if (!SHOWN_GRADES.has(post.grade) || shownRefs.has(post.ref) || isDuplicateHead(post, head)) continue
+    if (!SHOWN_GRADES.has(post.grade) || shownRefs.has(post.ref) || post.ref === headRef) continue
     shownRefs.add(post.ref)
     shownOnce.push(post)
   }
@@ -167,6 +198,7 @@ function buildTree(department: GovElement, head: GovElement): HierarchyNode {
     const seen = new Set<string>()
     let current = byRef.get(ref)?.reportsTo ?? ''
     while (current && !seen.has(current)) {
+      if (current === headRef) return null
       if (shownRefs.has(current)) return current
       seen.add(current)
       const parent = byRef.get(current)
@@ -201,6 +233,7 @@ function buildTree(department: GovElement, head: GovElement): HierarchyNode {
       title: title.text,
       unit: unit || 'Unit not published',
       grade: post.grade,
+      seniority: SENIORITY_BY_GRADE[post.grade] ?? post.grade,
       jobFunction: lookupJobFunction(department.id, post.ref),
       nameRedacted: name.redacted,
       titleRedacted: title.redacted,
@@ -208,15 +241,18 @@ function buildTree(department: GovElement, head: GovElement): HierarchyNode {
     }
   }
 
-  const holder = head.currentHolder?.trim()
+  const name = displayField(headPost.name)
+  const title = displayField(headPost.title)
   return {
-    ref: '__head__',
-    name: holder || head.name,
-    title: holder ? head.name : head.description,
-    unit: department.name,
-    grade: headGradeLabel(head),
-    nameRedacted: false,
-    titleRedacted: false,
+    ref: headPost.ref,
+    name: name.text,
+    title: title.text,
+    unit: headPost.unit.trim() || department.name,
+    grade: headPost.grade,
+    seniority: SENIORITY_BY_GRADE[headPost.grade] ?? headPost.grade,
+    jobFunction: lookupJobFunction(department.id, headPost.ref),
+    nameRedacted: name.redacted,
+    titleRedacted: title.redacted,
     isHead: true,
     children: roots.sort(comparePosts).map(post => toNode(post, new Set())),
   }
@@ -256,12 +292,10 @@ export function resolveHierarchy(selectedId: string | null): HierarchyModel {
     ministers,
   }
 
-  const head = headElement(department.id)
-  if (!head) {
+  const tree = buildTree(department)
+  if (!tree) {
     return { kind: 'no-head', ...attribution, initiallyCollapsed: [] }
   }
-
-  const tree = buildTree(department, head)
   if (tree.children.length === 0) {
     return { kind: 'no-posts', ...attribution, tree, initiallyCollapsed: [] }
   }

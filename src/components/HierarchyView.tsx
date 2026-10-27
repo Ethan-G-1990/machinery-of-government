@@ -3,7 +3,9 @@ import type { GovElement } from '../data/elements'
 import {
   formatSnapshotDate,
   gradeRank,
+  listHierarchyDepartments,
   resolveHierarchy,
+  type HierarchyDepartmentChoice,
   type HierarchyModel,
   type HierarchyNode,
 } from '../data/hierarchyTree'
@@ -11,6 +13,7 @@ import './HierarchyView.css'
 
 interface HierarchyViewProps {
   selectedElementId: string | null
+  onSelectElement: (id: string) => void
 }
 
 type GradeFilter = 'all' | 'SCS3' | 'SCS2' | 'SCS1'
@@ -36,15 +39,24 @@ const FILTERS: { id: GradeFilter; label: string }[] = [
   { id: 'SCS1', label: 'SCS1' },
 ]
 
-const GRADE_COLOURS: Record<string, string> = {
-  'Permanent Secretary': '#003366',
-  'Chief Executive': '#003366',
-  'Director of Public Prosecutions': '#003366',
-  'National Statistician': '#003366',
+const PAY_COLOURS: Record<string, string> = {
+  SCS4: '#922b21',
   SCS3: '#1a5276',
   SCS2: '#1e8449',
   SCS1: '#7d6608',
 }
+
+const SENIORITY_COLOURS: Record<string, string> = {
+  'Permanent Secretary': '#003366',
+  'Chief Executive': '#003366',
+  'Director of Public Prosecutions': '#003366',
+  'National Statistician': '#003366',
+  'Director General': '#6c3483',
+  Director: '#0e6655',
+  'Deputy Director': '#a04000',
+}
+
+const HEAD_BORDER = '#003366'
 
 const OGL_URL = 'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'
 
@@ -235,7 +247,9 @@ interface CardProps {
 }
 
 function PostCard({ node, hasChildren, open, childCount, clickable, onActivate }: CardProps) {
-  const colour = GRADE_COLOURS[node.grade] ?? '#003366'
+  const borderColour = node.isHead ? HEAD_BORDER : (PAY_COLOURS[node.grade] ?? HEAD_BORDER)
+  const seniorityColour = SENIORITY_COLOURS[node.seniority] ?? HEAD_BORDER
+  const payColour = PAY_COLOURS[node.grade]
   const activate = (event: MouseEvent) => {
     if ((event.target as HTMLElement).closest('.hierarchy-function')) return
     onActivate()
@@ -248,7 +262,7 @@ function PostCard({ node, hasChildren, open, childCount, clickable, onActivate }
         clickable ? 'hierarchy-card-button' : '',
         open ? 'hierarchy-card-open' : '',
       ].filter(Boolean).join(' ')}
-      style={{ '--grade-colour': colour } as CSSProperties}
+      style={{ '--grade-colour': borderColour } as CSSProperties}
       role="treeitem"
       tabIndex={clickable || node.jobFunction ? 0 : undefined}
       aria-expanded={hasChildren ? open : undefined}
@@ -264,7 +278,10 @@ function PostCard({ node, hasChildren, open, childCount, clickable, onActivate }
         {hasChildren && (
           <span className={`hierarchy-chevron${open ? '' : ' hierarchy-chevron-collapsed'}`} aria-hidden="true">▾</span>
         )}
-        <span className="hierarchy-grade">{node.grade}</span>
+        <span className="hierarchy-grade" style={{ '--grade-colour': seniorityColour } as CSSProperties}>{node.seniority}</span>
+        {payColour && (
+          <span className="hierarchy-grade" style={{ '--grade-colour': payColour } as CSSProperties}>{node.grade}</span>
+        )}
         {hasChildren && <span className="hierarchy-count">{childCount}</span>}
       </div>
       <span className={`hierarchy-name${node.nameRedacted ? ' hierarchy-redacted' : ''}`}>{node.name}</span>
@@ -289,10 +306,10 @@ function moreGrade(nodes: HierarchyNode[]): { label: string; colour: string } {
   const grades = [...new Set(nodes.map(node => node.grade))]
   if (grades.length === 1) {
     const label = grades[0]
-    return { label, colour: GRADE_COLOURS[label] ?? '#7d6608' }
+    return { label, colour: PAY_COLOURS[label] ?? '#7d6608' }
   }
   const senior = [...nodes].sort((a, b) => gradeRank(b.grade) - gradeRank(a.grade))[0]
-  return { label: 'Posts', colour: GRADE_COLOURS[senior?.grade ?? ''] ?? '#003366' }
+  return { label: 'Posts', colour: PAY_COLOURS[senior?.grade ?? ''] ?? '#003366' }
 }
 
 function MoreCard({ nodes, open, onActivate }: { nodes: HierarchyNode[]; open: boolean; onActivate: () => void }) {
@@ -590,7 +607,7 @@ function HierarchyTree({ model }: { model: HierarchyModel & { tree: HierarchyNod
         </div>
         {filteredRootEmpty && (
           <p className="hierarchy-filter-empty">
-            No {filter === 'all' ? 'SCS1–SCS3' : filter} posts are published under this head.
+            No {filter === 'all' ? 'SCS1–SCS4' : filter} posts are published under this head.
           </p>
         )}
       </div>
@@ -618,19 +635,51 @@ function Attribution({ model }: { model: HierarchyModel }) {
   )
 }
 
-export default function HierarchyView({ selectedElementId }: HierarchyViewProps) {
+function DepartmentPicker({
+  departments,
+  selectedId,
+  onSelectElement,
+}: {
+  departments: HierarchyDepartmentChoice[]
+  selectedId: string | null
+  onSelectElement: (id: string) => void
+}) {
+  return (
+    <div className="hierarchy-department-picker">
+      <p className="hierarchy-kicker">Departments</p>
+      <div className="hierarchy-department-list" role="group" aria-label="Departments">
+        {departments.map(department => {
+          const selected = department.id === selectedId
+          return (
+            <button
+              key={department.id}
+              type="button"
+              className={`hierarchy-minister${selected ? ' hierarchy-department-selected' : ''}`}
+              aria-pressed={selected}
+              onClick={() => onSelectElement(department.id)}
+            >
+              <span className="hierarchy-minister-office">{department.name}</span>
+              {department.holder && <span className="hierarchy-minister-holder">{department.holder}</span>}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+export default function HierarchyView({ selectedElementId, onSelectElement }: HierarchyViewProps) {
   const model = useMemo(() => resolveHierarchy(selectedElementId), [selectedElementId])
+  const departments = useMemo(() => listHierarchyDepartments(), [])
 
   return (
     <div className="hierarchy-view">
-      {model.kind === 'prompt' && (
-        <div className="hierarchy-scroll">
-          <div className="hierarchy-empty">
-            <p className="hierarchy-empty-title">Select a ministerial department</p>
-            <p>Its senior civil service is shown here, from the permanent secretary through SCS3, SCS2, and SCS1.</p>
-          </div>
-        </div>
-      )}
+      <DepartmentPicker
+        departments={departments}
+        selectedId={model.departmentId ?? null}
+        onSelectElement={onSelectElement}
+      />
+      {model.kind === 'prompt' && <div className="hierarchy-scroll" />}
       {model.kind === 'no-profile' && (
         <div className="hierarchy-scroll">
           <div className="hierarchy-empty">
@@ -655,8 +704,8 @@ export default function HierarchyView({ selectedElementId }: HierarchyViewProps)
           </div>
           <div className="hierarchy-scroll">
             <div className="hierarchy-empty">
-              <p className="hierarchy-empty-title">No SCS1–SCS3 posts</p>
-              <p>The published organogram for {model.departmentName} has no SCS1, SCS2, or SCS3 posts to show under the permanent secretary.</p>
+              <p className="hierarchy-empty-title">No SCS1–SCS4 posts</p>
+              <p>The published organogram for {model.departmentName} has no SCS1, SCS2, SCS3, or SCS4 posts to show under the permanent secretary.</p>
             </div>
           </div>
         </>

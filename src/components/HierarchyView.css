@@ -88,6 +88,44 @@
   color: #52606d;
 }
 
+.hierarchy-department-picker {
+  flex-shrink: 0;
+  padding: 0.35rem 1rem 0.65rem;
+  border-bottom: 1px solid #e6ebef;
+}
+
+.hierarchy-department-picker .hierarchy-kicker {
+  margin-bottom: 0.35rem;
+}
+
+.hierarchy-department-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  max-height: 9.5rem;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+}
+
+button.hierarchy-minister {
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  min-height: 44px;
+  color: inherit;
+}
+
+button.hierarchy-minister:focus-visible {
+  outline: 2px solid #003366;
+  outline-offset: 2px;
+}
+
+.hierarchy-department-selected {
+  border-color: #003366;
+  background: #f4f7fb;
+}
+
 .hierarchy-controls {
   display: flex;
   flex-wrap: wrap;
@@ -377,6 +415,7 @@ button.hierarchy-card {
 
 .hierarchy-card-top {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.35rem;
   min-width: 0;
@@ -430,9 +469,6 @@ button.hierarchy-card {
   border-radius: 3px;
   color: var(--grade-colour);
   background: color-mix(in srgb, var(--grade-colour) 12%, #fff);
-}
-
-.hierarchy-card-head .hierarchy-grade {
   white-space: nowrap;
 }
 
@@ -550,6 +586,7 @@ button.hierarchy-card {
 }
 
 .app-dark .hierarchy-toolbar,
+.app-dark .hierarchy-department-picker,
 .app-dark .hierarchy-footer {
   border-color: #30363d;
   background: #0d1117;
@@ -576,6 +613,15 @@ button.hierarchy-card {
 .app-dark .hierarchy-minister {
   background: #161b22;
   border-color: #30363d;
+}
+
+.app-dark .hierarchy-department-selected {
+  border-color: #58a6ff;
+  background: #161b22;
+}
+
+.app-dark button.hierarchy-minister:focus-visible {
+  outline-color: #58a6ff;
 }
 
 .app-dark .hierarchy-minister-secretary {
@@ -608,6 +654,7 @@ button.hierarchy-card {
 }
 
 .app-dark .hierarchy-grade {
+  color: color-mix(in srgb, var(--grade-colour) 46%, #e6edf3);
   background: color-mix(in srgb, var(--grade-colour) 22%, #0d1117);
 }
 
